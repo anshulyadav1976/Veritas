@@ -253,3 +253,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Replaced headline-only automatic joins with a deterministic score over headline overlap and publication-time proximity, plus hard opposing-action conflicts. The membership record persists every signal and the `headline-time-conflict-v2` version.
 - Expanded the labelled regression set with open/close and approve/reject hard negatives. A failed fixture exposed inflected verb handling; the action vocabulary was corrected before release.
 - Migrations, lint, 46 unit tests, and the production build passed.
+
+## 2026-08-18 — auditable evidence correction and recomputation
+
+- Added append-only corrections for claims, claim evidence, primary materials, coverage records, and summaries. The owner review flow validates same-story targets, publishes an evidence-specific correction, and leaves the original record intact for readers.
+- Added `story-derived-v1`, which atomically recomputes active member-report importance and records the reason/result. Operators can run it independently after a review operation.
+- Migrations, lint, 48 unit tests, and the production build passed.

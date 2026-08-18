@@ -2,7 +2,7 @@
 
 This is a relational model, not migration code. IDs are stable UUIDs; timestamps are UTC; display dates/locales are rendered at the edge. Language uses BCP 47 where known, country uses ISO 3166 where appropriate. Unknown is a real state, not a missing default.
 
-The current SQLite migrations implement sources, articles, article aliases, stories/memberships, reviewed story summaries, story-level primary-material records, credentials, source-assessment and ownership record storage, claims/evidence, and reporting chains. Analysis-run, user, bookmark, and timeline-event tables remain conceptual until their reader-facing workflows exist.
+The current SQLite migrations implement sources, articles, article aliases, stories/memberships, reviewed story summaries, story-level primary-material records, credentials, source-assessment and ownership record storage, claims/evidence, reporting chains, append-only evidence corrections, and recomputation-run records. Analysis-run, user, bookmark, and timeline-event tables remain conceptual until their reader-facing workflows exist.
 
 ```mermaid
 erDiagram
@@ -55,6 +55,8 @@ erDiagram
 | **StoryAnalysis** | Shared canonical summary, agreed facts, uncertainty, coverage/framing findings, and cited evidence set. One active version may be displayed, but all versions remain auditable. |
 | **Claim** | Atomic, attributable proposition; exact normalized text, claim type, scope/time, extraction provenance, and a discrete verification status. Opinions/predictions are explicitly non-fact-checkable. |
 | **ClaimEvidence** | Claim → primary document, data, court/legislative filing, article, or fact-check-result link; relationship is `supports`, `contradicts`, `context`, or `mentions`; include quoted permitted span, retrieval time, strength rationale, and provenance. Supporting and contradicting evidence are never collapsed into one score. |
+| **EvidenceCorrection** | Append-only operator correction against one existing claim, claim-evidence record, primary material, coverage record, or summary. It includes a bounded note, method version, and timestamp; it never overwrites the original record. |
+| **StoryRecomputation** | An auditable run that refreshes stored derived values. Current `story-derived-v1` recomputes the active member-report count used for importance and records its reason/result atomically with a correction where applicable. |
 
 The implemented model currently stores publisher-report evidence and reviewed primary-material evidence as separate claim relations, each with its own support/contradiction/context stance and note. It does not yet extract source spans or treat either relation as automatic verification.
 | **AnalysisRun** | Cross-cutting immutable record for model/provider/template/schema/input hash/cost/timing/error. Other analysis records point to it. |

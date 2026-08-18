@@ -10,6 +10,7 @@ import { createReportingChain } from "@/lib/reporting-chains";
 import { saveStorySummary } from "@/lib/story-summaries";
 import { addPrimaryMaterial } from "@/lib/primary-materials";
 import { saveCoverage, saveTopic } from "@/lib/coverage";
+import { recordCorrection, recomputeStory } from "@/lib/corrections";
 
 export async function addClaim(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized");
@@ -46,3 +47,5 @@ export async function addPrimaryEvidence(formData: FormData) {
 export async function attachPrimaryMaterial(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); addClaimPrimaryMaterial({claimId:String(formData.get("claimId")??""),primaryMaterialId:String(formData.get("primaryMaterialId")??""),stance:String(formData.get("stance")??""),note:String(formData.get("note")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function setTopic(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveTopic({storyId,topic:String(formData.get("topic")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function setCoverage(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveCoverage({storyId,articleId:String(formData.get("articleId")??""),coverageForm:String(formData.get("coverageForm")??""),focusNote:String(formData.get("focusNote")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
+export async function correctEvidence(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); const [targetType,targetId] = String(formData.get("target")??"").split(":", 2); recordCorrection({storyId,targetType,targetId,note:String(formData.get("note")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
+export async function recomputeStoryData(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); recomputeStory({storyId,reason:String(formData.get("reason")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }

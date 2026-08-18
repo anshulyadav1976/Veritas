@@ -9,7 +9,9 @@ export type StoryOperation = { id: string; action: string; reason: string; relat
 export type StorySummary = { text: string; evidenceArticleId: string; methodVersion: string; updatedAt: string };
 export type PrimaryMaterial = { id: string; title: string; materialType: string; url: string; relevanceNote: string; publishedAt: string | null; methodVersion: string };
 export type CoverageRecord = { articleId: string; coverageForm: string; focusNote: string; methodVersion: string };
-export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; primaryMaterials: PrimaryMaterial[]; topic: string | null; coverageRecords: CoverageRecord[]; diversity: StoryDiversity; operations: StoryOperation[]; summaryRecord: StorySummary | null };
+export type EvidenceCorrection = { id: string; targetType: string; targetId: string; note: string; methodVersion: string; createdAt: string };
+export type StoryRecomputation = { id: string; reason: string; detailsJson: string; methodVersion: string; createdAt: string };
+export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; primaryMaterials: PrimaryMaterial[]; topic: string | null; coverageRecords: CoverageRecord[]; corrections: EvidenceCorrection[]; recomputations: StoryRecomputation[]; diversity: StoryDiversity; operations: StoryOperation[]; summaryRecord: StorySummary | null };
 export type SourceProfile = { id: string; name: string; domain: string; countryCode: string | null; languageTag: string | null; sourceType: string | null; articleCount: number; storyCount: number; assessment: { status: string; rationale: string | null; evidenceUrl: string | null; methodVersion: string; reviewedAt: string | null } | null; owners: Array<{ ownerName: string; evidenceUrl: string; assertedAt: string | null; confidence: number }>; articles: Array<{ id: string; title: string; canonicalUrl: string; publishedAt: string | null; storyId: string | null; storyHeadline: string | null }> };
 
 export function listStories(limit = 30, countryCode?: string): StoryPreview[] {
@@ -88,6 +90,8 @@ export function getStory(id: string): StoryDetail | null {
   const primaryMaterials = db.prepare("SELECT id, title, material_type AS materialType, url, relevance_note AS relevanceNote, published_at AS publishedAt, method_version AS methodVersion FROM primary_materials WHERE story_id = ? ORDER BY created_at DESC").all(id) as PrimaryMaterial[];
   const topic = (db.prepare("SELECT topic FROM story_topics WHERE story_id = ?").get(id) as { topic: string } | undefined)?.topic ?? null;
   const coverageRecords = db.prepare("SELECT article_id AS articleId, coverage_form AS coverageForm, focus_note AS focusNote, method_version AS methodVersion FROM article_coverage_records WHERE story_id = ?").all(id) as CoverageRecord[];
+  const corrections = db.prepare("SELECT id, target_type AS targetType, target_id AS targetId, note, method_version AS methodVersion, created_at AS createdAt FROM evidence_corrections WHERE story_id = ? ORDER BY created_at DESC").all(id) as EvidenceCorrection[];
+  const recomputations = db.prepare("SELECT id, reason, details_json AS detailsJson, method_version AS methodVersion, created_at AS createdAt FROM story_recomputations WHERE story_id = ? ORDER BY created_at DESC LIMIT 10").all(id) as StoryRecomputation[];
   const diversity = db.prepare(`
     SELECT COUNT(DISTINCT sources.id) AS sourceCount,
       COUNT(DISTINCT CASE WHEN ownership_assertions.id IS NOT NULL THEN sources.id END) AS sourcesWithOwnership,
@@ -100,5 +104,5 @@ export function getStory(id: string): StoryDetail | null {
   `).get(id, id, id) as StoryDiversity;
   const operations = db.prepare("SELECT id, action, reason, related_story_id AS relatedStoryId, created_at AS createdAt FROM story_operations WHERE story_id = ? OR related_story_id = ? ORDER BY created_at DESC").all(id, id) as StoryOperation[];
   const summaryRecord = db.prepare("SELECT text, evidence_article_id AS evidenceArticleId, method_version AS methodVersion, updated_at AS updatedAt FROM story_summaries WHERE story_id = ?").get(id) as StorySummary | undefined;
-  return { ...story, articles, claims, primaryMaterials, topic, coverageRecords, diversity, operations, summaryRecord: summaryRecord ?? null };
+  return { ...story, articles, claims, primaryMaterials, topic, coverageRecords, corrections, recomputations, diversity, operations, summaryRecord: summaryRecord ?? null };
 }

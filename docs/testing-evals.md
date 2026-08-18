@@ -55,7 +55,9 @@ The current deterministic rule also tests explicit opposing-action pairs (for ex
 
 Published claims must have a linked story report and an attributed note. Timeline items currently represent publication dates only. Diversity cards disclose the count of sources with recorded ownership; they do not calculate independence, political balance, or blindspots until the data model and labelled evaluation set support those claims.
 
-Story-level primary-material records are additionally bounded to reviewed HTTPS links without embedded credentials, an explicit material type, and a relevance note. They are not yet claim-level evidence, and their display never treats a linked fact check or official record as a blanket verification result.
+Story-level primary-material records are additionally bounded to reviewed HTTPS links without embedded credentials, an explicit material type, and a relevance note. Claim-to-primary-material attachments preserve an explicit supporting, contradicting, or context relationship; neither display treats a linked fact check or official record as a blanket verification result.
+
+Correction inputs require an existing, same-story target and a bounded explanation. A correction and the `story-derived-v1` report-count recomputation run in one SQLite transaction; tests cover the validation boundary, while a targeted integration fixture remains required before claiming broad correction-workflow coverage.
 
 Claim-to-primary-material evidence is now validated to the same story as the claim. Reader output labels publisher-report evidence and primary-material evidence separately; both use discrete support, contradiction, or context relationships and neither becomes an automatic verdict.
 

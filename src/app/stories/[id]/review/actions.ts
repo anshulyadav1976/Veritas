@@ -9,6 +9,7 @@ import { mergeStories, splitStoryArticle } from "@/lib/story-operations";
 import { createReportingChain } from "@/lib/reporting-chains";
 import { saveStorySummary } from "@/lib/story-summaries";
 import { addPrimaryMaterial } from "@/lib/primary-materials";
+import { saveCoverage, saveTopic } from "@/lib/coverage";
 
 export async function addClaim(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized");
@@ -42,3 +43,5 @@ export async function addPrimaryEvidence(formData: FormData) {
   addPrimaryMaterial({ storyId, title: String(formData.get("title") ?? ""), materialType: String(formData.get("materialType") ?? ""), url: String(formData.get("url") ?? ""), relevanceNote: String(formData.get("relevanceNote") ?? ""), publishedAt: String(formData.get("publishedAt") ?? "") });
   revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`);
 }
+export async function setTopic(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveTopic({storyId,topic:String(formData.get("topic")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
+export async function setCoverage(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveCoverage({storyId,articleId:String(formData.get("articleId")??""),coverageForm:String(formData.get("coverageForm")??""),focusNote:String(formData.get("focusNote")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }

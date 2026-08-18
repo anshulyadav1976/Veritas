@@ -64,7 +64,7 @@ Depends on: M2.
 - [ ] Add account/auth through a replaceable library or adapter, preferences, saved stories, and basic topic/region ranking with clear controls.
 - [x] Add source-profile displays; keep historical assessment/ownership records and article-level reporting visibly separate. There are no orientation/reliability labels until reviewed source-assessment data exists.
 - [x] Add versioned, schema-validated global summaries only where an operator selects a story report as evidence; publish the method label and retain the source link. The current owner workflow also records human-authored claims with linked publisher evidence; it does not generate or imply a model verdict.
-- [ ] Add perspective comparison that reports observed coverage/framing differences, sample size, unknown/unclassified share, and caveats.
+- [x] Add an evidence-limited coverage-form comparison: reviewed per-report form counts, sample size, unclassified remainder, and explicit caveats. It deliberately does not infer political orientation, truthfulness, or quality.
 - [x] Implement settings, encrypted BYOK credentials, provider test/delete flows, safe custom endpoint validation, and a security review. The first test flow is OpenAI-compatible only; other provider adapters need their own bounded connection contracts.
 - [x] Add installable PWA shell and offline fallback with local saved-story IDs. The service worker intentionally caches only the offline page; report/evidence caching is deferred until it can carry clear freshness and deletion controls.
 

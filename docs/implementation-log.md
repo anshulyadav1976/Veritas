@@ -232,3 +232,8 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added a safe `Accept-Language` parser for the root document language and server-rendered home, story, and source-profile timestamps. Invalid language tags fall back to English; invalid dates are labelled unavailable rather than rendered misleadingly.
 - English remains the current copy language. This change provides display localization without claiming translated editorial content or changing source-language metadata.
 - Migrations, lint, 41 unit tests, and the production build passed.
+
+## 2026-08-18 — evidence-limited coverage comparison
+
+- Added operator-reviewed story topics and per-report coverage-form records (direct reporting, analysis, opinion, or unknown). The reader shows only reviewed sample counts and does not derive political orientation, accuracy, or quality.
+- Migrations, lint, 43 unit tests, and the production build passed.

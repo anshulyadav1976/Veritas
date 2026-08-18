@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { describeMembership } from "@/lib/provenance";
 import { isOwner } from "@/lib/owner-session";
 import { getStory } from "@/lib/stories";
+import { SaveStoryButton } from "../../saved/save-story-button";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
       <p className="eyebrow">{story.state} · {story.articleCount} reports · {story.sourceCount} publications</p>
       <h1>{story.headline}</h1>
       {story.summary && <p className="lede">{story.summary}</p>}
+      <SaveStoryButton storyId={story.id}/>
       <section className="evidence-intro" aria-labelledby="reporting-heading">
         <div><p className="eyebrow">Evidence trail</p><h2 id="reporting-heading">Original reporting</h2></div>
         <p>This is a source list, not a credibility verdict. Each entry links to the publisher’s original page and shows why this report was included.</p>

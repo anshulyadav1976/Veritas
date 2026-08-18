@@ -81,7 +81,7 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 ### Verification
 
 - `pnpm db:migrate`, `pnpm lint`, `pnpm test` (10 tests), and `pnpm build` passed.
-- A Playwright smoke test seeded an isolated SQLite database, opened the home page, followed a story card, and verified the original-reporting heading and external publisher link.
+- The reader route is covered by the production build and fixture-backed ingestion tests. The local browser runner is not available in this environment, so interactive browser coverage is not claimed here.
 - The UI was reviewed against the current [Web Interface Guidelines](https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md); the actionable findings addressed in this slice were skip navigation, heading wrapping, hover/focus/touch feedback, and destructive-action confirmation.
 
 ### Research consulted
@@ -106,7 +106,7 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 ### Verification
 
 - `pnpm db:migrate`, lint, 14 unit tests, and a production build passed.
-- An isolated Playwright flow seeded a story, unlocked the owner dashboard, published an evidence record, and verified that it appeared in the public evidence section.
+- The owner review route is covered by the production build and input-validation tests. The local browser runner is not available in this environment, so interactive browser coverage is not claimed here.
 
 ### Research consulted
 
@@ -122,3 +122,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added a schema-bounded, same-origin, read-only story API with a 1–100 limit and no-store responses. It exposes no secrets, provider controls, or mutations.
 - Added the standalone web manifest for mobile installation. Offline caches are deliberately deferred until saved-story freshness and clear-local-data controls exist.
 - `pnpm lint`, 16 unit tests, and `pnpm build` passed. A production-server smoke test verified the API’s successful `limit=1` JSON/no-store response and its `400` response for `limit=101`.
+
+## 2026-08-18 — local-only saved stories
+
+- Added a local reading list backed only by browser storage, with save/remove controls on a story and a `/saved` page. No account, cookie, server database record, or analytics event is created.
+- The UI makes the storage boundary and clearing behavior explicit; it is not presented as offline evidence caching.
+- The UI was checked against the current [Web Interface Guidelines](https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md); this pass added intentional mobile tap feedback, hover treatment for saved-story links, long-headline wrapping, and `content-visibility` for larger saved lists.

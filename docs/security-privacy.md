@@ -34,6 +34,10 @@ Use secure, HttpOnly, same-site cookies; CSRF protection for cookie-authenticate
 
 News interests and reading behavior can reveal sensitive political beliefs. Default to public anonymous reading, collect only the data needed for an explicit feature, make personalization/history/media-diet analytics opt-in and understandable, offer account data deletion, and plan portable export only after data provenance is mature. Do not sell behavioral profiles or add invasive engagement telemetry. Saved story/offline PWA data must have an obvious local clear control and staleness disclosure.
 
+### Current local reading list
+
+Saved stories are a browser-local `localStorage` list of public story IDs. Veritas does not transmit it, attach it to an account, or use it for ranking. The saved-stories page states that clearing browser storage removes the list; a future offline cache must add an explicit clear control and freshness label before caching reporting or evidence.
+
 ## Copyright and records
 
 Record acquisition policy, source attribution, retention expiry, and link provenance with each article. Store bounded permitted excerpts by default and delete transient full-text analysis input. Build takedown/correction and retention operations before offering optional archives. A legal review is necessary before asserting fair-use, robots, or provider-term interpretations for public hosting.

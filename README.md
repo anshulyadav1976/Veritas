@@ -19,6 +19,8 @@ pnpm dev
 
 Open `http://localhost:3000`. Check `http://localhost:3000/api/health` for database health.
 
+The public read-only API begins at `http://localhost:3000/api/v1/stories`; see [docs/api.md](docs/api.md). The app includes a web manifest for standalone mobile installation. Offline caching/saved stories are intentionally not enabled yet, so readers are never shown stale evidence without a clear feature boundary.
+
 Run verification with `pnpm lint`, `pnpm test`, and `pnpm build`.
 
 ## Configuration and secrets

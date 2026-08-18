@@ -111,3 +111,14 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 ### Research consulted
 
 - [OWASP SSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) informed the next custom-provider endpoint hardening step; it recommends real URL parsing, blocked internal targets, and disabled/validated redirects.
+
+## 2026-08-18 — custom provider endpoint guard
+
+- Dashboard-managed custom endpoints are now accepted only for OpenAI-compatible credentials over public HTTPS. The server resolves the host and rejects private, local, link-local, reserved, multicast, IPv6 local, and mapped-private answers before saving.
+- Tests cover a public endpoint plus HTTP, literal loopback, and DNS-private failures. The documented environment-variable path remains deliberate self-host operator control rather than a browser-reachable bypass.
+
+## 2026-08-18 — small public API and mobile manifest
+
+- Added a schema-bounded, same-origin, read-only story API with a 1–100 limit and no-store responses. It exposes no secrets, provider controls, or mutations.
+- Added the standalone web manifest for mobile installation. Offline caches are deliberately deferred until saved-story freshness and clear-local-data controls exist.
+- `pnpm lint`, 16 unit tests, and `pnpm build` passed. A production-server smoke test verified the API’s successful `limit=1` JSON/no-store response and its `400` response for `limit=101`.

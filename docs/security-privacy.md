@@ -18,6 +18,10 @@ Custom OpenAI-compatible base URLs, article canonical URLs, feeds, redirect targ
 
 This follows the threat model in the [OWASP SSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html). Test hostile URL forms, DNS answers, redirects, IPv4-mapped IPv6, decimal/hex IP forms, and metadata endpoints.
 
+### Implemented dashboard policy
+
+The owner dashboard currently allows a custom base URL only for an OpenAI-compatible credential. It requires HTTPS, no embedded credentials, the default HTTPS port, and DNS answers that are all public; direct/private, loopback, link-local, carrier-grade NAT, reserved, multicast, unique-local, and IPv4-mapped private addresses are refused. Redirects are already disabled on the application’s fetchers. Environment variables remain an explicit operator-controlled escape hatch for local development or a private model gateway; do not expose a dashboard that can reach such a gateway to untrusted users.
+
 ## Untrusted content and AI
 
 Feed/page/article text, HTML, embedded metadata, PDF text, external fact checks, and user prompts are data—not instructions. Sanitize/strip active content before rendering; never execute fetched scripts. Separate trusted system policy, tool policy, untrusted retrieved evidence, and user input in model messages. Article-analysis workers get no browser automation, filesystem access, credential access, or arbitrary networking. Models cannot call secret-bearing providers. Schema validation, citation checks, output limits, injection fixtures, and human correction paths are mandatory.

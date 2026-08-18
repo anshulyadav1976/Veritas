@@ -33,7 +33,7 @@ export type StoryArticle = {
 export type StoryClaim = { id: string; text: string; status: string; analysisVersion: string; createdAt: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string };
 export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[] };
 
-export function listStories(): StoryPreview[] {
+export function listStories(limit = 30): StoryPreview[] {
   runMigrations();
   return db.prepare(`
     SELECT stories.id, stories.headline, stories.summary, stories.state, stories.importance,
@@ -45,8 +45,8 @@ export function listStories(): StoryPreview[] {
     WHERE stories.state != 'superseded'
     GROUP BY stories.id
     ORDER BY stories.importance DESC, stories.updated_at DESC
-    LIMIT 30
-  `).all() as StoryPreview[];
+    LIMIT ?
+  `).all(limit) as StoryPreview[];
 }
 
 export function getStory(id: string): StoryDetail | null {

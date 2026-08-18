@@ -164,3 +164,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added a UTC-hour idempotent RSS queue command and a one-job worker that runs real feed ingestion.
 - Failed jobs retry twice with capped backoff; after that, SQLite retains the failed status and a bounded error message for operator inspection. No job endpoint is public.
 - Lint, 22 tests, production build, empty-registry queue, and empty-worker commands passed.
+
+## 2026-08-18 — reviewable source records
+
+- Added an owner-only source review form for evidence-linked historical assessment records and dated ownership assertions with a bounded confidence field.
+- Public profiles keep these records separate from individual articles and explain that no assessment is a verdict on a particular report.
+- Lint, 24 tests, and the production build passed.

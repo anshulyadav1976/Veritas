@@ -1,0 +1,11 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { dashboardIsConfigured, isOwner } from "@/lib/owner-session";
+import { getSourceProfile } from "@/lib/stories";
+import { saveSource } from "./actions";
+
+export default async function SourceReviewPage({ params }: { params: Promise<{ domain: string }> }) {
+  const domain = decodeURIComponent((await params).domain); if (!dashboardIsConfigured() || !(await isOwner())) notFound();
+  const source = getSourceProfile(domain); if (!source) notFound();
+  return <main id="main-content" className="shell"><header className="masthead"><Link className="wordmark" href={`/sources/${encodeURIComponent(domain)}`}>VERITAS</Link><p>Operator review</p></header><section className="brief"><p className="eyebrow">Source records</p><h1>Record evidence, not a universal verdict.</h1><p className="lede">Source assessment is historical and contextual. Ownership requires a separate evidence link and confidence record.</p></section><form action={saveSource} className="credential-form"><input type="hidden" name="sourceId" value={source.id}/><input type="hidden" name="domain" value={source.domain}/><label>Assessment status<select name="status" defaultValue={source.assessment?.status ?? "unassessed"}><option value="unassessed">Unassessed</option><option value="reviewed">Reviewed</option><option value="disputed">Disputed</option></select></label><label>Assessment rationale<input name="rationale" maxLength={1000} autoComplete="off" defaultValue={source.assessment?.rationale ?? ""}/></label><label>Assessment evidence URL<input name="evidenceUrl" type="url" autoComplete="off" placeholder="https://example.org/method…" defaultValue={source.assessment?.evidenceUrl ?? ""}/></label><label>Owner name (optional)<input name="ownerName" maxLength={200} autoComplete="off"/></label><label>Ownership evidence URL<input name="ownerEvidenceUrl" type="url" autoComplete="off" placeholder="https://example.org/ownership…"/></label><label>Ownership record confidence (0–1)<input name="confidence" type="number" min="0" max="1" step="0.1" defaultValue="0.5" required/></label><button type="submit">Publish source records</button></form></main>;
+}

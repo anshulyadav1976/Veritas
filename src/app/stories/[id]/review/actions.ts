@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { createClaim } from "@/lib/claims";
 import { isOwner } from "@/lib/owner-session";
 import { mergeStories, splitStoryArticle } from "@/lib/story-operations";
+import { createReportingChain } from "@/lib/reporting-chains";
 
 export async function addClaim(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized");
@@ -23,4 +24,9 @@ export async function splitStory(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized"); const sourceStoryId = String(formData.get("sourceStoryId") ?? "");
   const storyId = splitStoryArticle({ sourceStoryId, articleId: String(formData.get("articleId") ?? ""), headline: String(formData.get("headline") ?? ""), reason: String(formData.get("reason") ?? "") });
   revalidatePath(`/stories/${sourceStoryId}`); redirect(`/stories/${storyId}`);
+}
+export async function addReportingChain(formData: FormData) {
+  if (!(await isOwner())) throw new Error("Unauthorized"); const storyId = String(formData.get("storyId") ?? "");
+  createReportingChain({ storyId, articleId: String(formData.get("articleId") ?? ""), label: String(formData.get("label") ?? ""), basis: String(formData.get("basis") ?? ""), confidence: String(formData.get("confidence") ?? "") });
+  revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`);
 }

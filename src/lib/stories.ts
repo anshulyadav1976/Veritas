@@ -31,7 +31,7 @@ export type StoryArticle = {
 };
 
 export type StoryClaim = { id: string; text: string; status: string; analysisVersion: string; createdAt: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string };
-export type StoryDiversity = { sourceCount: number; sourcesWithOwnership: number; recordedOwnerGroups: number };
+export type StoryDiversity = { sourceCount: number; sourcesWithOwnership: number; recordedOwnerGroups: number; reportingChainCount: number; unclassifiedArticles: number };
 export type StoryOperation = { id: string; action: string; reason: string; relatedStoryId: string | null; createdAt: string };
 export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; diversity: StoryDiversity; operations: StoryOperation[] };
 
@@ -127,13 +127,15 @@ export function getStory(id: string): StoryDetail | null {
   const diversity = db.prepare(`
     SELECT COUNT(DISTINCT sources.id) AS sourceCount,
       COUNT(DISTINCT CASE WHEN ownership_assertions.id IS NOT NULL THEN sources.id END) AS sourcesWithOwnership,
-      COUNT(DISTINCT ownership_assertions.owner_name) AS recordedOwnerGroups
+      COUNT(DISTINCT ownership_assertions.owner_name) AS recordedOwnerGroups,
+      (SELECT COUNT(*) FROM reporting_chains WHERE story_id = ?) AS reportingChainCount,
+      (SELECT COUNT(*) FROM story_articles chain_members WHERE chain_members.story_id = ? AND chain_members.decision != 'rejected' AND NOT EXISTS (SELECT 1 FROM reporting_chain_articles WHERE reporting_chain_articles.article_id = chain_members.article_id)) AS unclassifiedArticles
     FROM story_articles
     JOIN articles ON articles.id = story_articles.article_id
     JOIN sources ON sources.id = articles.source_id
     LEFT JOIN ownership_assertions ON ownership_assertions.source_id = sources.id
     WHERE story_articles.story_id = ? AND story_articles.decision != 'rejected'
-  `).get(id) as StoryDiversity;
+  `).get(id, id, id) as StoryDiversity;
   const operations = db.prepare("SELECT id, action, reason, related_story_id AS relatedStoryId, created_at AS createdAt FROM story_operations WHERE story_id = ? OR related_story_id = ? ORDER BY created_at DESC").all(id, id) as StoryOperation[];
   return { ...story, articles, claims, diversity, operations };
 }

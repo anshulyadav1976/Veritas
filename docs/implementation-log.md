@@ -176,3 +176,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added owner-only merge and split operations with required reasons. Merges supersede the source story and preserve its memberships; splits reject the original membership and create a reviewed membership in a new story.
 - Every operation is recorded in `story_operations` and shown as story history instead of silently rewriting clustering decisions.
 - Migrations, lint, 26 unit tests, a production build, and an isolated SQLite merge/split transaction smoke test passed.
+
+## 2026-08-18 — documented reporting chains
+
+- Added owner-reviewed reporting-chain records with an evidence article, basis, confidence, and article membership.
+- Story diversity now distinguishes documented chains from reports without a chain record; it does not infer independence from missing data.
+- Migrations, lint, 28 tests, and a production build passed.

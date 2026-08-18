@@ -187,3 +187,8 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 
 - Dashboard-managed OpenAI-compatible endpoints are now re-resolved and validated before provider connection tests and grounded-Q&A requests, not only at save time.
 - Environment-configured endpoints remain the documented self-host operator exception. Lint, 28 tests, and the production build passed.
+
+## 2026-08-18 — installable PWA safety boundary
+
+- Added a manifest icon, service-worker registration, and offline fallback page for standalone installation.
+- The service worker caches only the offline page and never stores reports, evidence, claims, or API results. Lint, 28 tests, and a production build passed.

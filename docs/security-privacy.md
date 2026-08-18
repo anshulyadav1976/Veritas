@@ -42,6 +42,10 @@ News interests and reading behavior can reveal sensitive political beliefs. Defa
 
 Saved stories are a browser-local `localStorage` list of public story IDs. Veritas does not transmit it, attach it to an account, or use it for ranking. The saved-stories page states that clearing browser storage removes the list; a future offline cache must add an explicit clear control and freshness label before caching reporting or evidence.
 
+### Offline behavior
+
+The installed PWA registers a deliberately minimal service worker. It caches only the offline fallback document and uses it only when a navigation cannot reach the network. It does not cache story pages, articles, excerpts, claims, or API responses, so the application cannot present stale evidence as current reporting.
+
 ## Copyright and records
 
 Record acquisition policy, source attribution, retention expiry, and link provenance with each article. Store bounded permitted excerpts by default and delete transient full-text analysis input. Build takedown/correction and retention operations before offering optional archives. A legal review is necessary before asserting fair-use, robots, or provider-term interpretations for public hosting.

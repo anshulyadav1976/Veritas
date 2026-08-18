@@ -49,6 +49,8 @@ Browser-local following tests validate that malformed storage is ignored and onl
 
 Published claims must have a linked story report and an attributed note. Timeline items currently represent publication dates only. Diversity cards disclose the count of sources with recorded ownership; they do not calculate independence, political balance, or blindspots until the data model and labelled evaluation set support those claims.
 
+Story-level primary-material records are additionally bounded to reviewed HTTPS links without embedded credentials, an explicit material type, and a relevance note. They are not yet claim-level evidence, and their display never treats a linked fact check or official record as a blanket verification result.
+
 ## Reviewed-summary guard
 
 A reader-facing reviewed summary is accepted only when it is 20–1,000 characters and tied to a non-rejected report already in its story. The page distinguishes this `operator-summary-v1` record from a short ingestion excerpt, which remains explicitly unreviewed. This enforces provenance mechanically, but does not substitute for the held-out factual-support evaluation required before automated summaries are introduced.

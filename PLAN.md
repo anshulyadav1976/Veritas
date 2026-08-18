@@ -75,7 +75,7 @@ Acceptance: mobile and desktop users can personalize a transparent feed, save st
 Depends on: M3 and labelled evaluation data.
 
 - [ ] Extract atomic factual claims from high-importance stories; require validated schemas, source spans, and analysis versions.
-- [ ] Associate supporting and contradicting evidence separately; use primary sources and fact-check search as evidence, never model memory as verification.
+- [ ] Associate supporting and contradicting evidence separately; use primary sources and fact-check search as evidence, never model memory as verification. Operators can now publish bounded, HTTPS-linked primary documents, official records/data, and fact-check records at story level; claim-to-primary-material associations and any search adapter remain.
 - [ ] Ship discrete statuses: Confirmed, Well supported, Contested, Unverified, Contradicted, or Opinion/prediction/not fact-checkable.
 - [ ] Add reporting-chain and ownership diversity, a conservative blindspot calculation, and provenance-rich timeline entries. Reporting-chain/ownership coverage and a publication timeline now exist; blindspots remain withheld until reviewed classification and sufficient samples exist.
 - [ ] Add an evaluation gate for every reader-facing intelligence output and a correction/recompute path. A minimal labelled clustering regression set and evidence publication guard now exist; broader held-out evaluation and correction workflows remain required.

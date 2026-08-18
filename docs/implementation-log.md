@@ -214,3 +214,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 
 - Added browser-local follows and a `/following` daily-brief surface. It filters the current public story list client-side, has a 100-ID validation cap, and exposes no account, server follow record, provider call, background sync, or notification delivery.
 - Migrations, lint, 34 unit tests, and the production build passed. The local test suite covers malformed/tampered following storage; interactive browser coverage remains unavailable in this environment and is not claimed.
+
+## 2026-08-18 — reviewed primary-material records
+
+- Added owner-reviewed, story-level records for primary documents, official records/data, and fact checks. Each requires a bounded public HTTPS link, title, explicit type, relevance note, optional ISO-8601 UTC date, and method version.
+- The reader presents these as relevant evidence links, not a verification verdict, and no server-side fetch is performed. Claim-to-primary-material associations and any fact-check search provider remain intentionally deferred.
+- `pnpm db:migrate`, `pnpm lint`, `pnpm test` (36 tests), and `pnpm build` passed.

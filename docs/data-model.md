@@ -2,7 +2,7 @@
 
 This is a relational model, not migration code. IDs are stable UUIDs; timestamps are UTC; display dates/locales are rendered at the edge. Language uses BCP 47 where known, country uses ISO 3166 where appropriate. Unknown is a real state, not a missing default.
 
-The current SQLite migrations implement sources, articles, article aliases, stories/memberships, reviewed story summaries, credentials, source-assessment and ownership record storage, claims/evidence, and reporting chains. Analysis-run, user, bookmark, and timeline-event tables remain conceptual until their reader-facing workflows exist.
+The current SQLite migrations implement sources, articles, article aliases, stories/memberships, reviewed story summaries, story-level primary-material records, credentials, source-assessment and ownership record storage, claims/evidence, and reporting chains. Analysis-run, user, bookmark, and timeline-event tables remain conceptual until their reader-facing workflows exist.
 
 ```mermaid
 erDiagram
@@ -13,6 +13,7 @@ erDiagram
   ARTICLE ||--o{ STORY_MEMBERSHIP : belongs_to
   STORY ||--o{ STORY_MEMBERSHIP : groups
   STORY ||--o| STORY_SUMMARY : has_current_reviewed_summary
+  STORY ||--o{ PRIMARY_MATERIAL : links_to
   STORY ||--o{ STORY_ANALYSIS : has
   ARTICLE ||--o{ ARTICLE_ANALYSIS : has
   STORY ||--o{ CLAIM : contains
@@ -39,6 +40,7 @@ erDiagram
 | --- | --- |
 | **Story** | Stable identity, current canonical headline/summary pointers, state (`developing`, `active`, `settled`, `archived`, `superseded`), category/entity/location links, importance/freshness signals, and current analysis pointer. |
 | **StorySummary** | One current, bounded, operator-reviewed summary. It names a story-member evidence report and method version; replacing it updates the current record rather than silently presenting an ingestion excerpt as review. |
+| **PrimaryMaterial** | A bounded, reviewed external link to a primary document, official record/data, or fact check. It carries a relevance note and optional publication time; the record is relevant evidence, not an automatic truth verdict. |
 | **StoryMembership** | Article/story relation with decision (`automatic`, `reviewed`, `rejected`), score components, algorithm/version, evaluated time, reviewer/correction reference. It makes merges/splits explainable. |
 | **ReportingChain** | A tentative independent-origin chain for a story. It groups direct reporting, identified wire copy, and reprints without pretending certainty. `basis`, confidence, and source evidence are mandatory. |
 | **OwnershipAssertion** | Source → parent/ultimate owner relationship, ownership type/country, effective dates, confidence, evidence URL/reference, reviewer, and status. Ownership is temporal and often incomplete. |

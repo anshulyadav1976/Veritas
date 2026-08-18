@@ -8,6 +8,7 @@ import { isOwner } from "@/lib/owner-session";
 import { mergeStories, splitStoryArticle } from "@/lib/story-operations";
 import { createReportingChain } from "@/lib/reporting-chains";
 import { saveStorySummary } from "@/lib/story-summaries";
+import { addPrimaryMaterial } from "@/lib/primary-materials";
 
 export async function addClaim(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized");
@@ -34,5 +35,10 @@ export async function addReportingChain(formData: FormData) {
 export async function publishSummary(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized"); const storyId = String(formData.get("storyId") ?? "");
   saveStorySummary({ storyId, articleId: String(formData.get("articleId") ?? ""), text: String(formData.get("text") ?? "") });
+  revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`);
+}
+export async function addPrimaryEvidence(formData: FormData) {
+  if (!(await isOwner())) throw new Error("Unauthorized"); const storyId = String(formData.get("storyId") ?? "");
+  addPrimaryMaterial({ storyId, title: String(formData.get("title") ?? ""), materialType: String(formData.get("materialType") ?? ""), url: String(formData.get("url") ?? ""), relevanceNote: String(formData.get("relevanceNote") ?? ""), publishedAt: String(formData.get("publishedAt") ?? "") });
   revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`);
 }

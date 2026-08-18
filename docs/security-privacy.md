@@ -46,6 +46,10 @@ Saved stories are a browser-local `localStorage` list of public story IDs. Verit
 
 The installed PWA registers a deliberately minimal service worker. It caches only the offline fallback document and uses it only when a navigation cannot reach the network. It does not cache story pages, articles, excerpts, claims, or API responses, so the application cannot present stale evidence as current reporting.
 
+### Current media-diet history
+
+Media-diet tracking is disabled by default. When the reader opts in locally, the browser stores only story IDs and timestamps, capped at 200 visits. The panel makes this boundary explicit and has a control that removes both the history and opt-in flag. The data is never sent to Veritas or used for ranking.
+
 ## Copyright and records
 
 Record acquisition policy, source attribution, retention expiry, and link provenance with each article. Store bounded permitted excerpts by default and delete transient full-text analysis input. Build takedown/correction and retention operations before offering optional archives. A legal review is necessary before asserting fair-use, robots, or provider-term interpretations for public hosting.

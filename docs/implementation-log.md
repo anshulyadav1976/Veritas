@@ -192,3 +192,8 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 
 - Added a manifest icon, service-worker registration, and offline fallback page for standalone installation.
 - The service worker caches only the offline page and never stores reports, evidence, claims, or API results. Lint, 28 tests, and a production build passed.
+
+## 2026-08-18 — opt-in local media diet
+
+- Added browser-only media-diet tracking, disabled by default, with a 200-visit cap and one-click local history removal.
+- The interface labels it as a reading-history summary and explicitly does not infer source independence, political balance, or quality. Lint, 28 tests, and a production build passed.

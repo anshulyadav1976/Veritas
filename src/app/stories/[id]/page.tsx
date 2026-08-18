@@ -5,6 +5,7 @@ import { describeMembership } from "@/lib/provenance";
 import { isOwner } from "@/lib/owner-session";
 import { getStory } from "@/lib/stories";
 import { SaveStoryButton } from "../../saved/save-story-button";
+import { RecordStoryVisit } from "../../media-diet/record-story-visit";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
   if (!story) notFound();
   const owner = await isOwner();
   return <main id="main-content" className="shell">
+    <RecordStoryVisit storyId={story.id}/>
     <header className="masthead"><Link className="wordmark" href="/">VERITAS</Link><p>Evidence-first news</p></header>
     <article className="story-detail">
       <p className="eyebrow">{story.state} · {story.articleCount} reports · {story.sourceCount} publications</p>

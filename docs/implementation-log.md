@@ -152,3 +152,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added server-only OpenAI-compatible credential resolution: an encrypted dashboard credential overrides the explicit environment fallback when present.
 - Added an owner-invoked connection test against the standard Models endpoint. It has a timeout and disabled redirects, and returns only generic success/failure so provider error bodies and secrets never reach the browser.
 - Added request-shape and error-redaction tests. Lint, 19 tests, and a production build passed. The endpoint contract was verified against the official [OpenAI Models API reference](https://platform.openai.com/docs/api-reference/models/object).
+
+## 2026-08-18 — grounded owner Q&A
+
+- Added an owner-only Ask This Story workflow that requires a configured model and bounded report excerpts. No query reaches an LLM unless the owner chooses to ask.
+- The response must be JSON with citation IDs from the supplied evidence set. Malformed responses, provider errors, missing models, and invented citations produce no answer.
+- Added prompt-boundary and citation-rejection tests. Lint, 21 tests, and the production build passed. The JSON-response pattern was checked against the official [OpenAI API reference](https://platform.openai.com/docs/api-reference/evals/deleteRun?lang=python).

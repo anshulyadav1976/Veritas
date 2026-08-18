@@ -26,6 +26,10 @@ The owner dashboard currently allows a custom base URL only for an OpenAI-compat
 
 Feed/page/article text, HTML, embedded metadata, PDF text, external fact checks, and user prompts are data—not instructions. Sanitize/strip active content before rendering; never execute fetched scripts. Separate trusted system policy, tool policy, untrusted retrieved evidence, and user input in model messages. Article-analysis workers get no browser automation, filesystem access, credential access, or arbitrary networking. Models cannot call secret-bearing providers. Schema validation, citation checks, output limits, injection fixtures, and human correction paths are mandatory.
 
+### Current grounded Q&A boundary
+
+The owner-only Ask This Story route sends a question and the story’s bounded, attributed excerpts to the configured OpenAI-compatible model. It supplies no tools, network access, browser access, provider credentials in model content, or full article copies. The model must return JSON with a bounded answer and numeric citations; Veritas rejects malformed output and citation IDs outside the supplied excerpt set. A successful response is an evidence-grounded synthesis, not a verification verdict. This deliberate constraint reflects the official API’s structured JSON-response options ([reference](https://platform.openai.com/docs/api-reference/evals/deleteRun?lang=python)).
+
 ## Application protections
 
 Use secure, HttpOnly, same-site cookies; CSRF protection for cookie-authenticated mutations; authorization checks per user/tenant; rate limits on secret tests and costly analysis; validated schemas at every trust boundary; CSP and output escaping; dependency updates and vulnerability review. Never leak whether another user owns a credential or bookmark. Use least-privilege database roles when deployment demands it.

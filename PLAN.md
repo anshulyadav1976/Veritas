@@ -86,7 +86,7 @@ Acceptance: every displayed status, diversity metric, and timeline item links to
 
 Depends on: M4 maturity, operating experience, and governance.
 
-- [ ] Grounded “Ask this story” with evidence-only retrieval and citations.
+- [x] Grounded “Ask this story” with evidence-only retrieval and citations. It is owner-only in the no-account self-host model, sends bounded stored excerpts only, and rejects malformed or invented citations.
 - [ ] Opt-in media-diet analytics, followed stories, controlled notifications/daily brief, internationalized UI, community registry workflow, public API, then MCP.
 
 ## Quality gates

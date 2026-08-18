@@ -39,6 +39,8 @@ Automated tests prove mechanics; they do not prove political or factual fairness
 
 The MCP command is additionally smoke-tested with a local stdio JSON-RPC initialization, tool listing, and `veritas_list_stories` call. The check asserts the server starts, advertises only its read tools, and keeps protocol stdout parseable.
 
+Browser-local following tests validate that malformed storage is ignored and only unique UUIDs are retained; the UI still needs interactive browser coverage when that runner becomes available in this environment.
+
 ## Labelled clustering baseline
 
 `evals/clustering.json` is a small, version-controlled pair set that the test suite evaluates against the automatic headline-overlap rule. It is a regression tripwire, not a quality claim: it currently contains one true pair and one hard negative. Expand it with reviewed, jurisdiction-diverse examples before changing the clustering threshold or adding new signals.

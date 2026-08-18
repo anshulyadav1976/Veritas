@@ -81,6 +81,8 @@ button { min-height: 44px; width: fit-content; border: 0; border-radius: 4px; ba
 button:hover { background: var(--signal); }
 button.quiet { min-height: 32px; background: transparent; color: var(--ink); padding: 4px 0; text-decoration: underline; }
 button.quiet:hover { background: transparent; color: var(--signal); }
-.save-story { margin-top: 20px; color: var(--signal); }
+.story-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 20px; }
+.save-story { color: var(--signal); }
+.quiet-link { color: var(--signal); font: .72rem/1.4 ui-monospace, "IBM Plex Mono", monospace; letter-spacing: .05em; text-transform: uppercase; }
 :focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
 @media (max-width: 600px) { .shell { width: min(100% - 28px, 900px); } .masthead p { display: none; } .brief, .story-detail { padding-top: 52px; } .brief { padding-bottom: 40px; } .evidence-intro { grid-template-columns: 1fr; gap: 12px; margin-top: 44px; } .report { padding-left: 20px; } .timeline-list li { grid-template-columns: 1fr; gap: 6px; } .diversity dl { grid-template-columns: 1fr; } }

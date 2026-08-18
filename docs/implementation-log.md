@@ -209,3 +209,8 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added a local stdio MCP server with schema-bounded `veritas_list_stories` and `veritas_get_story` tools. It reads the same public model as the web reader and deliberately registers no mutation, credential, provider, ingestion, filesystem, or outbound-network tools.
 - The first transport is process-owned stdio, so the app does not add a remote HTTP endpoint or authorization surface. Remote MCP remains a separately scoped deployment-security task.
 - Migrations, lint, 32 unit tests, the production build, and a raw stdio JSON-RPC initialize/list/call smoke test passed. The implementation follows the current [MCP TypeScript server guide](https://ts.sdk.modelcontextprotocol.io/v2/get-started/first-server): inputs are Zod schemas and stdout is reserved for protocol messages.
+
+## 2026-08-18 — local followed-story brief
+
+- Added browser-local follows and a `/following` daily-brief surface. It filters the current public story list client-side, has a 100-ID validation cap, and exposes no account, server follow record, provider call, background sync, or notification delivery.
+- Migrations, lint, 34 unit tests, and the production build passed. The local test suite covers malformed/tampered following storage; interactive browser coverage remains unavailable in this environment and is not claimed.

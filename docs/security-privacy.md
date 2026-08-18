@@ -42,6 +42,10 @@ News interests and reading behavior can reveal sensitive political beliefs. Defa
 
 Saved stories are a browser-local `localStorage` list of public story IDs. Veritas does not transmit it, attach it to an account, or use it for ranking. The saved-stories page states that clearing browser storage removes the list; a future offline cache must add an explicit clear control and freshness label before caching reporting or evidence.
 
+### Current local follows and brief
+
+Following is a separate browser-local list of up to 100 validated story UUIDs. The `/following` page filters the already-public current story list in the browser; it does not transmit followed IDs, create an account, call an AI provider, or produce push/email notifications. Removing browser storage removes the list. Older, superseded, or no-longer-indexed stories are deliberately not persisted as a private server-side follow record. The design uses origin-scoped `localStorage` and the cross-tab `storage` event as specified by [MDN’s Web Storage API reference](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API).
+
 ### Offline behavior
 
 The installed PWA registers a deliberately minimal service worker. It caches only the offline fallback document and uses it only when a navigation cannot reach the network. It does not cache story pages, articles, excerpts, claims, or API responses, so the application cannot present stale evidence as current reporting.

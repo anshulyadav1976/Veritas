@@ -21,6 +21,8 @@ Open `http://localhost:3000`. Check `http://localhost:3000/api/health` for datab
 
 The public read-only API begins at `http://localhost:3000/api/v1/stories`; see [docs/api.md](docs/api.md). The app includes a web manifest, icon, and standalone mobile installation path. When offline, it shows a dedicated fallback instead of caching reports or evidence; local saved-story IDs remain browser-only.
 
+Saved stories, followed stories/local brief, and optional media-diet history are browser-only controls. They do not create an account or transmit a reading list, and clearing browser storage removes them.
+
 Run verification with `pnpm lint`, `pnpm test`, and `pnpm build`.
 
 ## MCP

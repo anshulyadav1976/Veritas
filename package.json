@@ -16,9 +16,11 @@
     "ingest": "tsx scripts/ingest.ts",
     "ingest:queue": "tsx scripts/queue-ingest.ts",
     "ingest:gdelt": "tsx scripts/ingest-gdelt.ts",
-    "worker": "tsx scripts/worker.ts"
+    "worker": "tsx scripts/worker.ts",
+    "mcp": "tsx scripts/mcp.ts"
   },
   "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
     "better-sqlite3": "^12.6.2",
     "fast-xml-parser": "^5.11.0",
     "next": "^16.2.0",

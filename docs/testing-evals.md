@@ -37,6 +37,8 @@ Automated tests prove mechanics; they do not prove political or factual fairness
 
 `pnpm db:migrate`, `pnpm lint`, `pnpm test`, and `pnpm build` are required locally and in CI. Tests cover URL canonicalization, XML parsing limits, conservative clustering, encrypted credentials, provider endpoint SSRF policy, claim and reviewed-summary input validation, and GDELT record parsing.
 
+The MCP command is additionally smoke-tested with a local stdio JSON-RPC initialization, tool listing, and `veritas_list_stories` call. The check asserts the server starts, advertises only its read tools, and keeps protocol stdout parseable.
+
 ## Labelled clustering baseline
 
 `evals/clustering.json` is a small, version-controlled pair set that the test suite evaluates against the automatic headline-overlap rule. It is a regression tripwire, not a quality claim: it currently contains one true pair and one hard negative. Expand it with reviewed, jurisdiction-diverse examples before changing the clustering threshold or adding new signals.

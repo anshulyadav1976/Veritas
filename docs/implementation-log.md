@@ -203,3 +203,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added one bounded, operator-reviewed story summary record with a required reference to a non-rejected report in that story and an explicit method version (`operator-summary-v1`).
 - Replacing a summary updates the same reviewed record and the story’s current display value. Initial RSS/GDELT excerpts remain visibly labelled as unreviewed; the system does not present them as verified or AI-authored summaries.
 - `pnpm db:migrate`, `pnpm lint`, `pnpm test` (30 tests), and `pnpm build` passed.
+
+## 2026-08-18 — local read-only MCP
+
+- Added a local stdio MCP server with schema-bounded `veritas_list_stories` and `veritas_get_story` tools. It reads the same public model as the web reader and deliberately registers no mutation, credential, provider, ingestion, filesystem, or outbound-network tools.
+- The first transport is process-owned stdio, so the app does not add a remote HTTP endpoint or authorization surface. Remote MCP remains a separately scoped deployment-security task.
+- Migrations, lint, 32 unit tests, the production build, and a raw stdio JSON-RPC initialize/list/call smoke test passed. The implementation follows the current [MCP TypeScript server guide](https://ts.sdk.modelcontextprotocol.io/v2/get-started/first-server): inputs are Zod schemas and stdout is reserved for protocol messages.

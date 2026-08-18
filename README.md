@@ -23,6 +23,10 @@ The public read-only API begins at `http://localhost:3000/api/v1/stories`; see [
 
 Run verification with `pnpm lint`, `pnpm test`, and `pnpm build`.
 
+## MCP
+
+`pnpm mcp` starts a local stdio [Model Context Protocol](https://modelcontextprotocol.io/) server. It intentionally exposes only two public, read-only tools: `veritas_list_stories` and `veritas_get_story`. It has no provider, credential, ingestion, or mutation tool. Run it through an MCP host that owns the process; never expose its stdio stream as an unauthenticated web endpoint.
+
 ## Configuration and secrets
 
 Provider credentials can be supplied from `.env` for local/self-hosted use. The owner-only `/settings` dashboard can also store them, encrypted at rest, when both `VERITAS_ENCRYPTION_KEY` and `VERITAS_ADMIN_PASSWORD` are configured. Saved secrets are never returned after saving. Never commit `.env` or the `data/` directory.

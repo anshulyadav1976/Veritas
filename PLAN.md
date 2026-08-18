@@ -87,7 +87,7 @@ Acceptance: every displayed status, diversity metric, and timeline item links to
 Depends on: M4 maturity, operating experience, and governance.
 
 - [x] Grounded “Ask this story” with evidence-only retrieval and citations. It is owner-only in the no-account self-host model, sends bounded stored excerpts only, and rejects malformed or invented citations.
-- [ ] Opt-in local media-diet analytics, followed stories, controlled notifications/daily brief, internationalized UI, community registry workflow, public API, then MCP. The local-only opt-in media-diet panel and read-only API are implemented; follows/digests, localization, community review workflow, and MCP remain.
+- [ ] Opt-in local media-diet analytics, followed stories, controlled notifications/daily brief, internationalized UI, community registry workflow, public API, then MCP. The local-only opt-in media-diet panel, read-only API, and local stdio MCP reader are implemented; follows/digests, localization, community review workflow, and remote MCP remain.
 
 ## Quality gates
 

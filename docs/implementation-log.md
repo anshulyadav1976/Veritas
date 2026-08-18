@@ -61,3 +61,10 @@ Implement the RSS provider and source/feed registry with fixture-based parsing b
 ### Next
 
 Add GDELT discovery behind explicit configuration, then build story-detail provenance and the owner-only credential dashboard.
+
+## 2026-08-18 — encrypted owner credentials
+
+- Added owner-only `/settings` login, signed HttpOnly strict-site cookie, encrypted provider-key storage, masked credential list, replacement and deletion.
+- Requires both `VERITAS_ADMIN_PASSWORD` and a 32-byte base64 `VERITAS_ENCRYPTION_KEY`; environment credentials remain supported.
+- AES-256-GCM encryption tests plus migration, lint, test, and production-build verification passed.
+- Based on [OWASP cryptographic storage guidance](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html).

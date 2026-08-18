@@ -3,6 +3,7 @@ import { z } from "zod";
 const envSchema = z.object({
   VERITAS_DATABASE_FILE: z.string().min(1).default("./data/veritas.db"),
   VERITAS_ENCRYPTION_KEY: z.string().optional(),
+  VERITAS_ADMIN_PASSWORD: z.string().min(16).optional(),
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_BASE_URL: z.url().default("https://api.openai.com/v1"),
   OPENAI_MODEL: z.string().optional(),

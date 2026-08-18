@@ -36,3 +36,28 @@
 ### Next
 
 Implement the RSS provider and source/feed registry with fixture-based parsing before making any live network calls.
+
+## 2026-08-18 — RSS ingestion baseline
+
+### Delivered
+
+- An opt-in `registry/feeds.json` and `pnpm ingest` command. An empty registry makes no network calls.
+- RSS 2.0 and Atom candidate parsing with canonical URLs, publication time, author, short text-only excerpts, and source metadata.
+- Two-megabyte body/content-length caps, a 10-second fetch timeout, redirects disabled, and explicit `DOCTYPE` rejection before XML parsing.
+- Prepared-statement persistence for sources/articles; canonical URL deduplication; transparent initial story membership with headline-token scoring.
+- Fixture tests for RSS, Atom, DTD rejection, URL cleanup, and false-join prevention in the clustering baseline.
+
+### Research consulted
+
+- [RSS 2.0 specification](https://www.rssboard.org/rss-2-0)
+- [Atom Syndication Format, RFC 4287](https://www.rfc-editor.org/info/rfc4287/)
+- [GDELT DOC 2.0 API introduction](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/)
+- [fast-xml-parser entity-expansion advisory](https://github.com/NaturalIntelligence/fast-xml-parser/security/advisories/GHSA-jmr7-xgp7-cmfj)
+
+### Verification
+
+- `pnpm lint`, `pnpm test` (6 tests), `pnpm db:migrate`, `pnpm ingest`, and `pnpm build` all passed.
+
+### Next
+
+Add GDELT discovery behind explicit configuration, then build story-detail provenance and the owner-only credential dashboard.

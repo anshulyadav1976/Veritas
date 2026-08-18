@@ -36,8 +36,8 @@ Acceptance: a contributor can start the empty shell and SQLite database locally 
 
 Depends on: M0.
 
-- [ ] Define the minimum candidate article/source domain types and provider contract, with a real RSS adapter and a real GDELT adapter only.
-- [ ] Create a curated, version-controlled RSS feed registry with provenance, region/language/category metadata, and an explicit contributor format.
+- [x] Define candidate article/source types and implement the RSS adapter. GDELT remains the next provider in this milestone.
+- [x] Create a version-controlled opt-in RSS feed registry; each feed record carries name, URL, country, language, and source-type metadata.
 - [ ] Implement canonical URL normalization with fixtures covering tracking parameters, query ordering, fragments, AMP paths, and redirect/canonical-link evidence.
 - [ ] Persist permitted article metadata, discovery provenance, fetch status, canonical URL, timestamps, language, and a bounded attributed snippet; do not archive full text by default.
 - [ ] Deduplicate exact URLs and materially identical feed entries; retain aliases and source provenance rather than discarding evidence.

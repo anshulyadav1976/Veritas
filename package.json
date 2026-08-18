@@ -13,10 +13,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:migrate": "tsx scripts/migrate.ts",
+    "ingest": "tsx scripts/ingest.ts",
     "worker": "tsx scripts/worker.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",
+    "fast-xml-parser": "^5.11.0",
     "next": "^16.2.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

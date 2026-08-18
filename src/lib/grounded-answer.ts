@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import type { OpenAiCredential } from "./credentials";
+import { safeProviderBaseUrl } from "./provider-url";
 
 export type EvidenceExcerpt = { id: number; sourceName: string; title: string; url: string; excerpt: string | null };
 const output = z.object({ answer: z.string().trim().min(1).max(2_000), citations: z.array(z.number().int().positive()).min(1).max(8) });
@@ -13,8 +14,9 @@ export function groundedPrompt(question: string, evidence: EvidenceExcerpt[]) {
 
 export async function askGroundedStory(credential: OpenAiCredential, question: string, evidence: EvidenceExcerpt[], fetcher: Fetcher = fetch) {
   if (!credential.model || evidence.length === 0) return null;
-  const endpoint = new URL("chat/completions", credential.baseUrl.endsWith("/") ? credential.baseUrl : `${credential.baseUrl}/`);
   try {
+    const baseUrl = credential.origin === "dashboard" ? await safeProviderBaseUrl(credential.baseUrl) : credential.baseUrl;
+    const endpoint = new URL("chat/completions", baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`);
     const response = await fetcher(endpoint, { method: "POST", headers: { Authorization: `Bearer ${credential.secret}`, "Content-Type": "application/json" }, redirect: "error", signal: AbortSignal.timeout(20_000), body: JSON.stringify({ model: credential.model, messages: [{ role: "system", content: "You answer only from supplied evidence and return JSON." }, { role: "user", content: groundedPrompt(question, evidence) }], response_format: { type: "json_object" }, temperature: 0, max_tokens: 700 }) });
     if (!response.ok) return null;
     const payload = completion.parse(await response.json());

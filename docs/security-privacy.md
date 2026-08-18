@@ -20,7 +20,7 @@ This follows the threat model in the [OWASP SSRF Prevention Cheat Sheet](https:/
 
 ### Implemented dashboard policy
 
-The owner dashboard currently allows a custom base URL only for an OpenAI-compatible credential. It requires HTTPS, no embedded credentials, the default HTTPS port, and DNS answers that are all public; direct/private, loopback, link-local, carrier-grade NAT, reserved, multicast, unique-local, and IPv4-mapped private addresses are refused. Redirects are already disabled on the application’s fetchers. Environment variables remain an explicit operator-controlled escape hatch for local development or a private model gateway; do not expose a dashboard that can reach such a gateway to untrusted users.
+The owner dashboard currently allows a custom base URL only for an OpenAI-compatible credential. It requires HTTPS, no embedded credentials, the default HTTPS port, and DNS answers that are all public; direct/private, loopback, link-local, carrier-grade NAT, reserved, multicast, unique-local, and IPv4-mapped private addresses are refused. Dashboard endpoints are resolved and checked again immediately before each connection-test or grounded-Q&A request; redirects are disabled. Environment variables remain an explicit operator-controlled escape hatch for local development or a private model gateway; do not expose a dashboard that can reach such a gateway to untrusted users.
 
 ## Untrusted content and AI
 

@@ -182,3 +182,8 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added owner-reviewed reporting-chain records with an evidence article, basis, confidence, and article membership.
 - Story diversity now distinguishes documented chains from reports without a chain record; it does not infer independence from missing data.
 - Migrations, lint, 28 tests, and a production build passed.
+
+## 2026-08-18 — request-time dashboard endpoint validation
+
+- Dashboard-managed OpenAI-compatible endpoints are now re-resolved and validated before provider connection tests and grounded-Q&A requests, not only at save time.
+- Environment-configured endpoints remain the documented self-host operator exception. Lint, 28 tests, and the production build passed.

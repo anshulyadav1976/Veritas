@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { createClaim } from "@/lib/claims";
+import { addClaimPrimaryMaterial, createClaim } from "@/lib/claims";
 import { isOwner } from "@/lib/owner-session";
 import { mergeStories, splitStoryArticle } from "@/lib/story-operations";
 import { createReportingChain } from "@/lib/reporting-chains";
@@ -43,5 +43,6 @@ export async function addPrimaryEvidence(formData: FormData) {
   addPrimaryMaterial({ storyId, title: String(formData.get("title") ?? ""), materialType: String(formData.get("materialType") ?? ""), url: String(formData.get("url") ?? ""), relevanceNote: String(formData.get("relevanceNote") ?? ""), publishedAt: String(formData.get("publishedAt") ?? "") });
   revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`);
 }
+export async function attachPrimaryMaterial(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); addClaimPrimaryMaterial({claimId:String(formData.get("claimId")??""),primaryMaterialId:String(formData.get("primaryMaterialId")??""),stance:String(formData.get("stance")??""),note:String(formData.get("note")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function setTopic(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveTopic({storyId,topic:String(formData.get("topic")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function setCoverage(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveCoverage({storyId,articleId:String(formData.get("articleId")??""),coverageForm:String(formData.get("coverageForm")??""),focusNote:String(formData.get("focusNote")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }

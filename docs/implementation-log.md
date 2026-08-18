@@ -242,3 +242,8 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 
 - Added a claim-to-primary-material relation with a distinct stance and bounded rationale. The database verifies that the material and claim belong to the same story, preventing cross-story evidence attachment.
 - Migrations, lint, 43 unit tests, and the production build passed.
+
+## 2026-08-18 — claim primary-evidence UI
+
+- Added an owner review form that attaches a reviewed primary material to an existing claim with a bounded stance/note. Public claim cards now render publisher-report and primary-material evidence as distinct evidence classes.
+- Migrations, lint, 44 unit tests, and the production build passed.

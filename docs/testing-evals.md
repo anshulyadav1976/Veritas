@@ -55,6 +55,8 @@ Published claims must have a linked story report and an attributed note. Timelin
 
 Story-level primary-material records are additionally bounded to reviewed HTTPS links without embedded credentials, an explicit material type, and a relevance note. They are not yet claim-level evidence, and their display never treats a linked fact check or official record as a blanket verification result.
 
+Claim-to-primary-material evidence is now validated to the same story as the claim. Reader output labels publisher-report evidence and primary-material evidence separately; both use discrete support, contradiction, or context relationships and neither becomes an automatic verdict.
+
 ## Reviewed-summary guard
 
 A reader-facing reviewed summary is accepted only when it is 20–1,000 characters and tied to a non-rejected report already in its story. The page distinguishes this `operator-summary-v1` record from a short ingestion excerpt, which remains explicitly unreviewed. This enforces provenance mechanically, but does not substitute for the held-out factual-support evaluation required before automated summaries are introduced.

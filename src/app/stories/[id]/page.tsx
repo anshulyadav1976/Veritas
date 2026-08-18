@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { describeMembership } from "@/lib/provenance";
+import { isOwner } from "@/lib/owner-session";
 import { getStory } from "@/lib/stories";
 
 export const dynamic = "force-dynamic";
@@ -11,10 +12,12 @@ function formatTime(timestamp: string | null) {
   const value = new Date(timestamp);
   return Number.isNaN(value.valueOf()) ? "Publication time unavailable" : new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(value);
 }
+const statusLabel = (status: string) => status.replaceAll("_", " ");
 
 export default async function StoryPage({ params }: { params: Promise<{ id: string }> }) {
   const story = getStory((await params).id);
   if (!story) notFound();
+  const owner = await isOwner();
   return <main id="main-content" className="shell">
     <header className="masthead"><Link className="wordmark" href="/">VERITAS</Link><p>Evidence-first news</p></header>
     <article className="story-detail">
@@ -33,6 +36,10 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
           <p className="metrics">{formatTime(article.publishedAt)} · {article.decision} join · {describeMembership(article.reasonJson, article.algorithmVersion)}</p>
         </li>)}
       </ol>
+      <section className="claims" aria-labelledby="claims-heading">
+        <div className="section-heading"><h2 id="claims-heading">Claims & evidence</h2>{owner && <Link href={`/stories/${story.id}/review`}>Add evidence</Link>}</div>
+        {story.claims.length === 0 ? <p className="empty-copy">No reviewed claim records have been published. Reports above are the available evidence trail.</p> : <ol className="claim-list">{story.claims.map((claim) => <li key={claim.id}><p className="eyebrow">{statusLabel(claim.status)} · {claim.analysisVersion}</p><h3>{claim.text}</h3><p>{claim.stance}: <a href={claim.articleUrl} target="_blank" rel="noreferrer">{claim.sourceName} — {claim.articleTitle}</a></p><blockquote>{claim.note}</blockquote></li>)}</ol>}
+      </section>
     </article>
   </main>;
 }

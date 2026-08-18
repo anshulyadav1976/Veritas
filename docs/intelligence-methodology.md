@@ -17,6 +17,10 @@ Use: **Confirmed**, **Well supported**, **Contested**, **Unverified**, **Contrad
 
 Claims are atomic: “Policy X took effect on date Y,” “the measure changed by Z in period P,” and “policy X caused the change” are different assertions. Supporting and contradicting evidence remain distinct.
 
+### Current implementation boundary
+
+The first implemented claim workflow is operator-authored, not automated. An owner records one bounded claim, a discrete status, one story report, its relationship (`supports`, `contradicts`, or `context`), and an attributed evidence note. The UI labels the record with its workflow version and preserves the link to the publisher. It does **not** infer truth from repeated articles, synthesize claims from model memory, or show a missing record as a negative result.
+
 ## Cross-source findings
 
 Compare a story’s evidence set rather than asking a model to label every article biased. A shared fact needs corroboration across genuinely independent chains or primary evidence. A disputed claim needs a clear conflict between credible evidence/interpretations. A framing finding names the compared sample, source/article criteria, observed differences, cited passages/headlines, unknown/unclassified share, and confidence.

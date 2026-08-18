@@ -94,3 +94,20 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - The fixed endpoint uses HTTPS, a timeout, disabled redirects, and a bounded JSON response. Each external record is validated independently; malformed items are dropped without accepting malformed JSON as source data.
 - GDELT is deliberately query-driven and not scheduled by default. It is discovery metadata only and never represented as source assessment or verification.
 - Fixture parsing, linting, tests, and the production build passed. An isolated live request reached GDELT but received HTTP 429; the command now reports that rate limit without retrying or creating background load.
+
+## 2026-08-18 — grounded operator evidence records
+
+### Delivered
+
+- Added source-assessment/ownership record storage and an evidence model: claims have a discrete status, version, and one or more report-linked evidence records whose stance remains separate.
+- Added an owner-only `/stories/:id/review` workflow. It validates bounded claim text and evidence notes, confirms the selected report belongs to the story inside the write transaction, and publishes the record to the public story page with an outbound citation.
+- Added a public empty state that says evidence records have not been reviewed rather than implying a claim is false or absent.
+
+### Verification
+
+- `pnpm db:migrate`, lint, 14 unit tests, and a production build passed.
+- An isolated Playwright flow seeded a story, unlocked the owner dashboard, published an evidence record, and verified that it appeared in the public evidence section.
+
+### Research consulted
+
+- [OWASP SSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) informed the next custom-provider endpoint hardening step; it recommends real URL parsing, blocked internal targets, and disabled/validated redirects.

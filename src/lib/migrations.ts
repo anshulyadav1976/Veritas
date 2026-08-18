@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { db } from "@/lib/db";
+import { db } from "./db";
 
 const migrationsDirectory = resolve(process.cwd(), "migrations");
 

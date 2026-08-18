@@ -30,7 +30,8 @@ export type StoryArticle = {
   algorithmVersion: string;
 };
 
-export type StoryDetail = StoryPreview & { articles: StoryArticle[] };
+export type StoryClaim = { id: string; text: string; status: string; analysisVersion: string; createdAt: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string };
+export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[] };
 
 export function listStories(): StoryPreview[] {
   runMigrations();
@@ -73,5 +74,16 @@ export function getStory(id: string): StoryDetail | null {
     WHERE story_articles.story_id = ? AND story_articles.decision != 'rejected'
     ORDER BY articles.published_at DESC, articles.discovered_at DESC
   `).all(id) as StoryArticle[];
-  return { ...story, articles };
+  const claims = db.prepare(`
+    SELECT claims.id, claims.text, claims.status, claims.analysis_version AS analysisVersion, claims.created_at AS createdAt,
+      articles.title AS articleTitle, articles.canonical_url AS articleUrl, sources.name AS sourceName,
+      claim_evidence.stance, claim_evidence.note
+    FROM claims
+    JOIN claim_evidence ON claim_evidence.claim_id = claims.id
+    JOIN articles ON articles.id = claim_evidence.article_id
+    JOIN sources ON sources.id = articles.source_id
+    WHERE claims.story_id = ?
+    ORDER BY claims.created_at DESC, claim_evidence.created_at ASC
+  `).all(id) as StoryClaim[];
+  return { ...story, articles, claims };
 }

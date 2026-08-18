@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import { mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
-import { env } from "@/lib/env";
+import { env } from "./env";
 
 const databasePath = resolve(env.VERITAS_DATABASE_FILE);
 mkdirSync(dirname(databasePath), { recursive: true });

@@ -52,7 +52,7 @@ Depends on: M1.
 - [ ] Implement the explainable hybrid clustering baseline and a reviewable story membership decision log.
 - [ ] Add manual merge/split controls restricted to operators; record supersession rather than rewrite history.
 - [ ] Produce canonical story headline/summary only from selected cluster evidence, with schema validation and explicit “early/developing” states.
-- [ ] Add source registry fundamentals: canonical identity, country/region/language/type, ownership assertions, and source assessments with evidence/review timestamps.
+- [x] Add source registry fundamentals: canonical identity, country/language/type, ownership assertions, and source-assessment storage with evidence/review timestamps. The operator interface for source assessment follows once a curated source registry exists.
 - [x] Build public home and story overview pages. They show report/publication counts, original links, and the stored membership decision—not premature political charts. Topic/region feeds and independent-chain counts follow source lineage work.
 
 Acceptance: a user can browse a correctly clustered story, inspect its articles and original links, and see why it exists.
@@ -63,7 +63,7 @@ Depends on: M2.
 
 - [ ] Add account/auth through a replaceable library or adapter, preferences, saved stories, and basic topic/region ranking with clear controls.
 - [ ] Add source-profile displays; keep historical orientation, reliability, and article-level analysis visibly separate.
-- [ ] Add versioned, schema-validated global summaries and article analyses only where sufficient evidence exists; provide per-finding citations.
+- [ ] Add versioned, schema-validated global summaries and article analyses only where sufficient evidence exists; provide per-finding citations. The current owner workflow records human-authored claims with linked publisher evidence; it does not generate or imply a model verdict.
 - [ ] Add perspective comparison that reports observed coverage/framing differences, sample size, unknown/unclassified share, and caveats.
 - [ ] Implement settings, encrypted BYOK credentials, provider test/delete flows, safe custom endpoint validation, and a security review.
 - [ ] Add installable PWA shell and offline fallback/saved-story cache after core browsing is solid.

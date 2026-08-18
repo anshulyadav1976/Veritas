@@ -2,6 +2,8 @@
 
 This is a relational model, not migration code. IDs are stable UUIDs; timestamps are UTC; display dates/locales are rendered at the edge. Language uses BCP 47 where known, country uses ISO 3166 where appropriate. Unknown is a real state, not a missing default.
 
+The current SQLite migrations implement sources, articles, article aliases, stories/memberships, credentials, source-assessment and ownership record storage, and claims/evidence. Reporting-chain, analysis-run, user, bookmark, and timeline-event tables remain conceptual until their reader-facing workflows exist.
+
 ```mermaid
 erDiagram
   SOURCE ||--o{ ARTICLE : publishes

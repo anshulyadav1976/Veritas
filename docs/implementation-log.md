@@ -259,3 +259,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added append-only corrections for claims, claim evidence, primary materials, coverage records, and summaries. The owner review flow validates same-story targets, publishes an evidence-specific correction, and leaves the original record intact for readers.
 - Added `story-derived-v1`, which atomically recomputes active member-report importance and records the reason/result. Operators can run it independently after a review operation.
 - Migrations, lint, 48 unit tests, and the production build passed.
+
+## 2026-08-18 — claim evidence intelligence
+
+- Claims now declare factual/statistical/causal type and require a bounded attributed source span. Operators can append separately labelled supporting, contradicting, or contextual publisher evidence instead of replacing a claim’s first record.
+- Added append-only, versioned status assessments across Confirmed, Well supported, Contested, Unverified, Contradicted, and Opinion. Confirmed is guarded by linked supporting primary material/fact-check evidence.
+- Migrations, lint, 49 unit tests, and the production build passed.

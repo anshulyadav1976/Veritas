@@ -19,7 +19,7 @@ Claims are atomic: “Policy X took effect on date Y,” “the measure changed 
 
 ### Current implementation boundary
 
-The first implemented claim workflow is operator-authored, not automated. An owner records one bounded claim, a discrete status, one story report, its relationship (`supports`, `contradicts`, or `context`), and an attributed evidence note. The UI labels the record with its workflow version and preserves the link to the publisher. It does **not** infer truth from repeated articles, synthesize claims from model memory, or show a missing record as a negative result.
+The implemented claim workflow is operator-authored, not automated. An owner records one bounded factual, statistical, or causal claim; an initial discrete status; an attributed report; a bounded quoted source span; and its relationship (`supports`, `contradicts`, or `context`). Further report evidence is appended separately, so supporting and contradicting records are never collapsed into one score. A later status assessment is also append-only and versioned. `confirmed` requires an attached supporting primary material or fact-check record; other statuses remain the owner’s explicit, evidence-linked assessment. The UI preserves original publisher links and method labels. It does **not** infer truth from repeated articles, synthesize claims from model memory, or show a missing record as a negative result.
 
 If a reviewed record needs correction, the owner appends a bounded correction to that exact record and receives an atomic recomputation of the story’s active-report count. The original source/evidence record remains visible; the public reader sees the correction history. This is correction context, not a silent rewrite or an automatic re-verification.
 

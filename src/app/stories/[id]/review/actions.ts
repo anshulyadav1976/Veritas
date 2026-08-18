@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { addClaimPrimaryMaterial, createClaim } from "@/lib/claims";
+import { addClaimEvidence, addClaimPrimaryMaterial, assessClaim, createClaim } from "@/lib/claims";
 import { isOwner } from "@/lib/owner-session";
 import { mergeStories, splitStoryArticle } from "@/lib/story-operations";
 import { createReportingChain } from "@/lib/reporting-chains";
@@ -15,7 +15,7 @@ import { recordCorrection, recomputeStory } from "@/lib/corrections";
 export async function addClaim(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized");
   const storyId = String(formData.get("storyId") ?? "");
-  createClaim({ storyId, articleId: String(formData.get("articleId") ?? ""), text: String(formData.get("text") ?? ""), status: String(formData.get("status") ?? ""), stance: String(formData.get("stance") ?? ""), note: String(formData.get("note") ?? "") });
+  createClaim({ storyId, articleId: String(formData.get("articleId") ?? ""), text: String(formData.get("text") ?? ""), claimType: String(formData.get("claimType") ?? ""), status: String(formData.get("status") ?? ""), stance: String(formData.get("stance") ?? ""), note: String(formData.get("note") ?? ""), evidenceSpan: String(formData.get("evidenceSpan") ?? "") });
   revalidatePath(`/stories/${storyId}`);
   redirect(`/stories/${storyId}`);
 }
@@ -45,6 +45,8 @@ export async function addPrimaryEvidence(formData: FormData) {
   revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`);
 }
 export async function attachPrimaryMaterial(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); addClaimPrimaryMaterial({claimId:String(formData.get("claimId")??""),primaryMaterialId:String(formData.get("primaryMaterialId")??""),stance:String(formData.get("stance")??""),note:String(formData.get("note")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
+export async function addEvidenceToClaim(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); addClaimEvidence({claimId:String(formData.get("claimId")??""),articleId:String(formData.get("articleId")??""),stance:String(formData.get("stance")??""),note:String(formData.get("note")??""),evidenceSpan:String(formData.get("evidenceSpan")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
+export async function assessEvidenceClaim(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); assessClaim({claimId:String(formData.get("claimId")??""),status:String(formData.get("status")??""),rationale:String(formData.get("rationale")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function setTopic(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveTopic({storyId,topic:String(formData.get("topic")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function setCoverage(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveCoverage({storyId,articleId:String(formData.get("articleId")??""),coverageForm:String(formData.get("coverageForm")??""),focusNote:String(formData.get("focusNote")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function correctEvidence(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); const [targetType,targetId] = String(formData.get("target")??"").split(":", 2); recordCorrection({storyId,targetType,targetId,note:String(formData.get("note")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }

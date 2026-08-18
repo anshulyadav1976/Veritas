@@ -3,7 +3,8 @@ import { runMigrations } from "./migrations";
 
 export type StoryPreview = { id: string; headline: string; summary: string | null; state: string; importance: number; sourceCount: number; articleCount: number; updatedAt: string };
 export type StoryArticle = { id: string; title: string; canonicalUrl: string; excerpt: string | null; publishedAt: string | null; sourceName: string; sourceDomain: string; sourceCountry: string | null; sourceLanguage: string | null; decision: string; score: number | null; reasonJson: string; algorithmVersion: string };
-export type StoryClaim = { id: string; text: string; status: string; analysisVersion: string; createdAt: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string; primaryMaterials: Array<{ id: string; title: string; url: string; materialType: string; stance: string; note: string }> };
+export type StoryClaimEvidence = { id: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string; evidenceSpan: string | null };
+export type StoryClaim = { id: string; text: string; claimType: string; status: string; analysisVersion: string; createdAt: string; evidence: StoryClaimEvidence[]; primaryMaterials: Array<{ id: string; title: string; url: string; materialType: string; stance: string; note: string }> };
 export type StoryDiversity = { sourceCount: number; sourcesWithOwnership: number; recordedOwnerGroups: number; reportingChainCount: number; unclassifiedArticles: number };
 export type StoryOperation = { id: string; action: string; reason: string; relatedStoryId: string | null; createdAt: string };
 export type StorySummary = { text: string; evidenceArticleId: string; methodVersion: string; updatedAt: string };
@@ -78,15 +79,29 @@ export function getStory(id: string): StoryDetail | null {
     ORDER BY articles.published_at DESC, articles.discovered_at DESC
   `).all(id) as StoryArticle[];
   const claimRows = db.prepare(`
-    SELECT claims.id, claims.text, claims.status, claims.analysis_version AS analysisVersion, claims.created_at AS createdAt,
+    SELECT claims.id, claims.text, claims.claim_type AS claimType, COALESCE(claim_assessments.status, claims.status) AS status,
+      COALESCE(claim_assessments.analysis_version, claims.analysis_version) AS analysisVersion, claims.created_at AS createdAt,
+      claim_evidence.id AS evidenceId,
       articles.title AS articleTitle, articles.canonical_url AS articleUrl, sources.name AS sourceName,
-      claim_evidence.stance, claim_evidence.note
+      claim_evidence.stance, claim_evidence.note, claim_evidence.evidence_span AS evidenceSpan
     FROM claims JOIN claim_evidence ON claim_evidence.claim_id = claims.id
     JOIN articles ON articles.id = claim_evidence.article_id JOIN sources ON sources.id = articles.source_id
+    LEFT JOIN claim_assessments ON claim_assessments.id = (
+      SELECT id FROM claim_assessments WHERE claim_id = claims.id ORDER BY created_at DESC, id DESC LIMIT 1
+    )
     WHERE claims.story_id = ? ORDER BY claims.created_at DESC, claim_evidence.created_at ASC
-  `).all(id) as Omit<StoryClaim, "primaryMaterials">[];
+  `).all(id) as Array<Omit<StoryClaim, "evidence" | "primaryMaterials"> & StoryClaimEvidence & { evidenceId: string }>;
   const materialsByClaim = db.prepare(`SELECT claim_primary_materials.claim_id AS claimId, primary_materials.id, primary_materials.title, primary_materials.url, primary_materials.material_type AS materialType, claim_primary_materials.stance, claim_primary_materials.note FROM claim_primary_materials JOIN primary_materials ON primary_materials.id = claim_primary_materials.primary_material_id WHERE primary_materials.story_id = ?`).all(id) as Array<{ claimId: string } & StoryClaim["primaryMaterials"][number]>;
-  const claims = claimRows.map((claim) => ({ ...claim, primaryMaterials: materialsByClaim.filter((material) => material.claimId === claim.id).map(({ claimId: _claimId, ...material }) => material) }));
+  const claims = claimRows.reduce<StoryClaim[]>((records, row) => {
+    let claim = records.find((record) => record.id === row.id);
+    if (!claim) {
+      const { evidenceId: _evidenceId, articleTitle, articleUrl, sourceName, stance, note, evidenceSpan, ...base } = row;
+      claim = { ...base, evidence: [], primaryMaterials: materialsByClaim.filter((material) => material.claimId === row.id).map(({ claimId: _claimId, ...material }) => material) };
+      records.push(claim);
+    }
+    claim.evidence.push({ id: row.evidenceId, articleTitle: row.articleTitle, articleUrl: row.articleUrl, sourceName: row.sourceName, stance: row.stance, note: row.note, evidenceSpan: row.evidenceSpan });
+    return records;
+  }, []);
   const primaryMaterials = db.prepare("SELECT id, title, material_type AS materialType, url, relevance_note AS relevanceNote, published_at AS publishedAt, method_version AS methodVersion FROM primary_materials WHERE story_id = ? ORDER BY created_at DESC").all(id) as PrimaryMaterial[];
   const topic = (db.prepare("SELECT topic FROM story_topics WHERE story_id = ?").get(id) as { topic: string } | undefined)?.topic ?? null;
   const coverageRecords = db.prepare("SELECT article_id AS articleId, coverage_form AS coverageForm, focus_note AS focusNote, method_version AS methodVersion FROM article_coverage_records WHERE story_id = ?").all(id) as CoverageRecord[];

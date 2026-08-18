@@ -158,3 +158,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added an owner-only Ask This Story workflow that requires a configured model and bounded report excerpts. No query reaches an LLM unless the owner chooses to ask.
 - The response must be JSON with citation IDs from the supplied evidence set. Malformed responses, provider errors, missing models, and invented citations produce no answer.
 - Added prompt-boundary and citation-rejection tests. Lint, 21 tests, and the production build passed. The JSON-response pattern was checked against the official [OpenAI API reference](https://platform.openai.com/docs/api-reference/evals/deleteRun?lang=python).
+
+## 2026-08-18 — idempotent RSS jobs
+
+- Added a UTC-hour idempotent RSS queue command and a one-job worker that runs real feed ingestion.
+- Failed jobs retry twice with capped backoff; after that, SQLite retains the failed status and a bounded error message for operator inspection. No job endpoint is public.
+- Lint, 22 tests, production build, empty-registry queue, and empty-worker commands passed.

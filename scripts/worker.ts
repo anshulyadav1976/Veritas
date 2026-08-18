@@ -1,34 +1,33 @@
 import { randomUUID } from "node:crypto";
 
-import { db } from "../src/lib/db";
-import { runMigrations } from "../src/lib/migrations";
-
-runMigrations();
+import { readFeedRegistry } from "../src/lib/feed-registry";
+import { ingestCandidate } from "../src/lib/ingestion";
+import { claimJob, completeJob, failJob } from "../src/lib/jobs";
+import { fetchRss } from "../src/lib/providers/rss";
 
 const workerId = `worker-${process.pid}-${randomUUID()}`;
-const now = new Date().toISOString();
-const job = db.transaction(() => {
-  const candidate = db.prepare(`
-    SELECT id, kind, payload_json FROM jobs
-    WHERE status = 'queued' AND run_after <= ?
-    ORDER BY created_at
-    LIMIT 1
-  `).get(now) as { id: string; kind: string; payload_json: string } | undefined;
-
-  if (!candidate) return undefined;
-  const result = db.prepare(`
-    UPDATE jobs
-    SET status = 'running', attempts = attempts + 1, locked_at = ?, locked_by = ?, updated_at = ?
-    WHERE id = ? AND status = 'queued'
-  `).run(now, workerId, now, candidate.id);
-  return result.changes === 1 ? candidate : undefined;
-})();
+const job = claimJob(workerId);
 
 if (!job) {
   console.log("No queued jobs.");
   process.exit(0);
 }
 
+async function run(runningJob: NonNullable<typeof job>) {
+  try {
+    if (runningJob.kind !== "rss-ingest") throw new Error(`Unsupported job kind: ${runningJob.kind}`);
+    const payload = JSON.parse(runningJob.payloadJson) as { feedId?: string };
+    const feed = readFeedRegistry().find((item) => item.id === payload.feedId);
+    if (!feed) throw new Error("Feed is no longer in the registry");
+    const articles = await fetchRss(feed);
+    const inserted = articles.map(ingestCandidate).filter((result) => !result.duplicate).length;
+    completeJob(runningJob.id);
+    console.log(`${feed.id}: ${inserted} new of ${articles.length} candidates`);
+  } catch (error) {
+    failJob(runningJob, error instanceof Error ? error.message : "Unknown job error");
+    console.error(`Job ${runningJob.id} failed.`);
+    process.exitCode = 1;
+  }
+}
 // ponytail: one worker and one job per invocation; add a long-running loop only when measured ingestion volume needs it.
-console.log(`Claimed ${job.kind} job ${job.id}. Provider work is added in the ingestion milestone.`);
-db.prepare("UPDATE jobs SET status = 'completed', updated_at = ? WHERE id = ?").run(new Date().toISOString(), job.id);
+void run(job);

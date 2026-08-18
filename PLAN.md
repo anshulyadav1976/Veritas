@@ -41,7 +41,7 @@ Depends on: M0.
 - [x] Implement canonical URL normalization with fixtures covering tracking parameters, query ordering, and fragments. AMP and publisher-declared canonical-link evidence are deferred because Veritas does not fetch article pages in this slice.
 - [x] Persist permitted article metadata, discovery provenance, canonical URL, timestamps, language, and a bounded attributed snippet; do not archive full text by default.
 - [x] Deduplicate exact URLs and retain a feed URL alias when canonicalization changes it. Materially-identical cross-URL dedupe is deferred until the labelled clustering evaluation exists.
-- [ ] Schedule idempotent ingestion and retry with provider-aware backoff; expose job records for debugging.
+- [x] Schedule idempotent RSS ingestion with UTC-hour idempotency and bounded retries; retain job records and a short failure message for operator debugging. GDELT remains intentionally operator-invoked because its query/cadence is a policy choice.
 
 Acceptance: fixtures and a small local feed run through discovery → normalized articles → deduplicated records, with links back to origin.
 

@@ -49,6 +49,8 @@ The PWA consumes the public reading experience; it never performs provider inges
 
 The original feed URL is retained in `article_aliases` when canonicalization changes it. Canonical URL uniqueness prevents a repeat feed item from becoming a second article. New reports receive a transparent headline-overlap clustering decision; the reader can see the stored decision and algorithm version on the story page.
 
+For scheduled self-host operation, `pnpm ingest:queue` creates at most one idempotent RSS job per reviewed feed per UTC hour and `pnpm worker` claims and runs one job. A failed job retries twice with bounded exponential backoff, then remains failed with a short error record for operator debugging. The web app does not expose a public job-creation endpoint.
+
 ## Deliberate boundaries
 
 - Only explicitly configured registry feeds are fetched. No user-provided feed URL is accepted by the web application.

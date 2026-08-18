@@ -128,3 +128,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added a local reading list backed only by browser storage, with save/remove controls on a story and a `/saved` page. No account, cookie, server database record, or analytics event is created.
 - The UI makes the storage boundary and clearing behavior explicit; it is not presented as offline evidence caching.
 - The UI was checked against the current [Web Interface Guidelines](https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md); this pass added intentional mobile tap feedback, hover treatment for saved-story links, long-headline wrapping, and `content-visibility` for larger saved lists.
+
+## 2026-08-18 — open-source quality baseline
+
+- Added repository CI for the exact migration, lint, unit-test, and production-build checks used locally.
+- Added contributor and security reporting guides that make data provenance, sensitive assessment contributions, and secret handling explicit.
+- Verified the CI action majors against the current upstream release pages before adding the workflow.

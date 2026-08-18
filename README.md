@@ -33,6 +33,10 @@ To add an RSS or Atom source, add a reviewed feed record to `registry/feeds.json
 
 Start with [PLAN.md](PLAN.md). Architectural, security, provider, methodology, testing, and design decisions are in [docs](docs/).
 
+## Contributing and security
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Automated CI runs migrations, linting, tests, and the production build on pushes and pull requests. Follow [SECURITY.md](SECURITY.md) for vulnerability reporting.
+
 ## Licence
 
 The intended application licence is AGPL-3.0-or-later, pending maintainer confirmation. No licence file has been added yet.

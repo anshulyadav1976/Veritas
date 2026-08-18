@@ -1,5 +1,10 @@
 import Link from "next/link";
+import { cookies, headers } from "next/headers";
 
-export default function OfflinePage() {
-  return <main id="main-content" className="shell"><header className="masthead"><span className="wordmark">VERITAS</span><p>Offline</p></header><section className="brief"><p className="eyebrow">Connection unavailable</p><h1>Veritas will not guess at stale evidence.</h1><p className="lede">Reconnect to load current reporting, sources, and citations. Saved story IDs remain in your browser, but reports are not cached for offline reading.</p><Link href="/">Try again</Link></section></main>;
+import { readerLanguage, readerLocale, t } from "@/lib/i18n";
+
+export default async function OfflinePage() {
+  const locale = readerLocale((await cookies()).get("veritas:language")?.value, (await headers()).get("accept-language"));
+  const language = readerLanguage(locale);
+  return <main id="main-content" className="shell"><header className="masthead"><span className="wordmark">VERITAS</span><p>{t(language, "offline")}</p></header><section className="brief"><p className="eyebrow">{t(language, "connectionUnavailable")}</p><h1>{t(language, "offlineTitle")}</h1><p className="lede">{t(language, "offlineDescription")}</p><Link href="/">{t(language, "tryAgain")}</Link></section></main>;
 }

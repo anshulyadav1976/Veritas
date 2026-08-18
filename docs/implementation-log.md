@@ -271,3 +271,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added an owner-reviewed geographic comparison target and `geographic-coverage-gap-v1`. It withholds output until the story has sufficient reports, publications, countries, coverage review, and country/reporting-chain provenance.
 - A surfaced gap means only that the reviewed sample contains no report from the requested country. It explicitly disclaims intentional omission, political balance, and source-quality conclusions. Versioned fixtures cover represented and observed-gap cases; a unit case covers withholding an undersized sample.
 - Migrations, lint, 53 unit tests, and the production build passed.
+
+## 2026-08-18 — localized reader controls and local alerts
+
+- Added an explicit English/Spanish reader-language preference with a secure same-site cookie and validated browser-language fallback. Dates use the selected locale; Veritas UI copy is translated across the home, offline, followed brief, alert controls, and main story-evidence surfaces. Source records remain in their original language.
+- Added opt-in browser-local alerts for followed stories. Permission is requested only by a button; only last-seen update timestamps stay in browser storage; checks run when the brief opens or refreshes. There is no push subscription, background work, server follow record, email, or provider call.
+- Lint, 57 unit tests, and the production build passed. Playwright browser checks remain unavailable because this environment lacks the Python package; the local development server started successfully before that dependency failure.

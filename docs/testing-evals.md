@@ -43,7 +43,9 @@ Registry tests require evidence-linked review metadata, unique IDs/URLs, and pub
 
 Browser-local following tests validate that malformed storage is ignored and only unique UUIDs are retained; the UI still needs interactive browser coverage when that runner becomes available in this environment.
 
-Locale tests choose the first valid browser language preference, fall back deterministically to English, and refuse to format invalid timestamps. The full production build verifies request-header rendering across the server component tree.
+Locale tests choose the first valid browser language preference, honor a valid local English/Spanish preference over the header, fall back deterministically to English, translate bounded variables, and refuse to format invalid timestamps. The full production build verifies request-header rendering across the server component tree.
+
+Local-notification tests validate malformed state handling and that only a previously seen followed story with a changed update time is eligible. They do not exercise an operating-system notification: browser automation could not run here because the environment lacks the Python Playwright package. The feature is intentionally foreground-only—open or refresh `/following` to check—so no background/push behavior is being implied.
 
 ## Labelled clustering baseline
 

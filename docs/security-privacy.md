@@ -48,9 +48,9 @@ News interests and reading behavior can reveal sensitive political beliefs. Defa
 
 Saved stories are a browser-local `localStorage` list of public story IDs. Veritas does not transmit it, attach it to an account, or use it for ranking. The saved-stories page states that clearing browser storage removes the list; a future offline cache must add an explicit clear control and freshness label before caching reporting or evidence.
 
-### Current local follows and brief
+### Current local follows, brief, and alerts
 
-Following is a separate browser-local list of up to 100 validated story UUIDs. The `/following` page filters the already-public current story list in the browser; it does not transmit followed IDs, create an account, call an AI provider, or produce push/email notifications. Removing browser storage removes the list. Older, superseded, or no-longer-indexed stories are deliberately not persisted as a private server-side follow record. The design uses origin-scoped `localStorage` and the cross-tab `storage` event as specified by [MDN’s Web Storage API reference](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API).
+Following is a separate browser-local list of up to 100 validated story UUIDs. The `/following` page filters the already-public current story list in the browser; it does not transmit followed IDs, create an account, or call an AI provider. An explicit button can request the browser’s notification permission and stores only the last seen update timestamp per followed current story in origin-scoped browser storage. It creates one local alert after the brief is opened/refreshed and a previously seen followed story changed. There is no push subscription, background sync, server-side follow record, email, provider call, or scheduled delivery. Disabling alerts clears their local state; removing browser storage removes the list. This follows [MDN’s Notifications API guidance](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API) to request permission from a user gesture and [Web Storage API reference](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API) for local state.
 
 ### Offline behavior
 

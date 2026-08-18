@@ -1,5 +1,6 @@
 import { db } from "./db";
 import { runMigrations } from "./migrations";
+import { evaluateGeographicBlindspot, type GeographicBlindspot } from "./blindspots";
 
 export type StoryPreview = { id: string; headline: string; summary: string | null; state: string; importance: number; sourceCount: number; articleCount: number; updatedAt: string };
 export type StoryArticle = { id: string; title: string; canonicalUrl: string; excerpt: string | null; publishedAt: string | null; sourceName: string; sourceDomain: string; sourceCountry: string | null; sourceLanguage: string | null; decision: string; score: number | null; reasonJson: string; algorithmVersion: string };
@@ -12,7 +13,8 @@ export type PrimaryMaterial = { id: string; title: string; materialType: string;
 export type CoverageRecord = { articleId: string; coverageForm: string; focusNote: string; methodVersion: string };
 export type EvidenceCorrection = { id: string; targetType: string; targetId: string; note: string; methodVersion: string; createdAt: string };
 export type StoryRecomputation = { id: string; reason: string; detailsJson: string; methodVersion: string; createdAt: string };
-export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; primaryMaterials: PrimaryMaterial[]; topic: string | null; coverageRecords: CoverageRecord[]; corrections: EvidenceCorrection[]; recomputations: StoryRecomputation[]; diversity: StoryDiversity; operations: StoryOperation[]; summaryRecord: StorySummary | null };
+export type StoryBlindspot = GeographicBlindspot & { rationale: string | null };
+export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; primaryMaterials: PrimaryMaterial[]; topic: string | null; coverageRecords: CoverageRecord[]; corrections: EvidenceCorrection[]; recomputations: StoryRecomputation[]; blindspot: StoryBlindspot; diversity: StoryDiversity; operations: StoryOperation[]; summaryRecord: StorySummary | null };
 export type SourceProfile = { id: string; name: string; domain: string; countryCode: string | null; languageTag: string | null; sourceType: string | null; articleCount: number; storyCount: number; assessment: { status: string; rationale: string | null; evidenceUrl: string | null; methodVersion: string; reviewedAt: string | null } | null; owners: Array<{ ownerName: string; evidenceUrl: string; assertedAt: string | null; confidence: number }>; articles: Array<{ id: string; title: string; canonicalUrl: string; publishedAt: string | null; storyId: string | null; storyHeadline: string | null }> };
 
 export function listStories(limit = 30, countryCode?: string): StoryPreview[] {
@@ -107,6 +109,15 @@ export function getStory(id: string): StoryDetail | null {
   const coverageRecords = db.prepare("SELECT article_id AS articleId, coverage_form AS coverageForm, focus_note AS focusNote, method_version AS methodVersion FROM article_coverage_records WHERE story_id = ?").all(id) as CoverageRecord[];
   const corrections = db.prepare("SELECT id, target_type AS targetType, target_id AS targetId, note, method_version AS methodVersion, created_at AS createdAt FROM evidence_corrections WHERE story_id = ? ORDER BY created_at DESC").all(id) as EvidenceCorrection[];
   const recomputations = db.prepare("SELECT id, reason, details_json AS detailsJson, method_version AS methodVersion, created_at AS createdAt FROM story_recomputations WHERE story_id = ? ORDER BY created_at DESC LIMIT 10").all(id) as StoryRecomputation[];
+  const blindspotScope = db.prepare("SELECT expected_country_code AS expectedCountryCode, rationale FROM story_geographic_blindspot_scopes WHERE story_id = ?").get(id) as { expectedCountryCode: string; rationale: string } | undefined;
+  const blindspotReports = db.prepare(`
+    SELECT sources.id AS sourceId, sources.country_code AS countryCode,
+      EXISTS(SELECT 1 FROM article_coverage_records WHERE story_id = ? AND article_id = articles.id) AS reviewed,
+      (SELECT reporting_chain_articles.reporting_chain_id FROM reporting_chain_articles JOIN reporting_chains ON reporting_chains.id = reporting_chain_articles.reporting_chain_id WHERE reporting_chain_articles.article_id = articles.id AND reporting_chains.story_id = ? LIMIT 1) AS chainId
+    FROM story_articles JOIN articles ON articles.id = story_articles.article_id JOIN sources ON sources.id = articles.source_id
+    WHERE story_articles.story_id = ? AND story_articles.decision != 'rejected'
+  `).all(id, id, id) as Array<{ sourceId: string; countryCode: string | null; reviewed: number; chainId: string | null }>;
+  const blindspot = { ...evaluateGeographicBlindspot(blindspotScope?.expectedCountryCode ?? null, blindspotReports.map((report) => ({ ...report, reviewed: Boolean(report.reviewed) }))), rationale: blindspotScope?.rationale ?? null };
   const diversity = db.prepare(`
     SELECT COUNT(DISTINCT sources.id) AS sourceCount,
       COUNT(DISTINCT CASE WHEN ownership_assertions.id IS NOT NULL THEN sources.id END) AS sourcesWithOwnership,
@@ -119,5 +130,5 @@ export function getStory(id: string): StoryDetail | null {
   `).get(id, id, id) as StoryDiversity;
   const operations = db.prepare("SELECT id, action, reason, related_story_id AS relatedStoryId, created_at AS createdAt FROM story_operations WHERE story_id = ? OR related_story_id = ? ORDER BY created_at DESC").all(id, id) as StoryOperation[];
   const summaryRecord = db.prepare("SELECT text, evidence_article_id AS evidenceArticleId, method_version AS methodVersion, updated_at AS updatedAt FROM story_summaries WHERE story_id = ?").get(id) as StorySummary | undefined;
-  return { ...story, articles, claims, primaryMaterials, topic, coverageRecords, corrections, recomputations, diversity, operations, summaryRecord: summaryRecord ?? null };
+  return { ...story, articles, claims, primaryMaterials, topic, coverageRecords, corrections, recomputations, blindspot, diversity, operations, summaryRecord: summaryRecord ?? null };
 }

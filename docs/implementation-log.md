@@ -265,3 +265,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Claims now declare factual/statistical/causal type and require a bounded attributed source span. Operators can append separately labelled supporting, contradicting, or contextual publisher evidence instead of replacing a claim’s first record.
 - Added append-only, versioned status assessments across Confirmed, Well supported, Contested, Unverified, Contradicted, and Opinion. Confirmed is guarded by linked supporting primary material/fact-check evidence.
 - Migrations, lint, 49 unit tests, and the production build passed.
+
+## 2026-08-18 — conservative geographic coverage-gap check
+
+- Added an owner-reviewed geographic comparison target and `geographic-coverage-gap-v1`. It withholds output until the story has sufficient reports, publications, countries, coverage review, and country/reporting-chain provenance.
+- A surfaced gap means only that the reviewed sample contains no report from the requested country. It explicitly disclaims intentional omission, political balance, and source-quality conclusions. Versioned fixtures cover represented and observed-gap cases; a unit case covers withholding an undersized sample.
+- Migrations, lint, 53 unit tests, and the production build passed.

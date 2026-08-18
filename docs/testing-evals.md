@@ -53,13 +53,15 @@ The current deterministic rule also tests explicit opposing-action pairs (for ex
 
 ## Reader-facing evidence gate
 
-Published claims must have a linked story report and an attributed note. Timeline items currently represent publication dates only. Diversity cards disclose the count of sources with recorded ownership; they do not calculate independence, political balance, or blindspots until the data model and labelled evaluation set support those claims.
+Published claims must have a linked story report and an attributed note. Timeline items currently represent publication dates only. Diversity cards disclose the count of sources with recorded ownership; they do not calculate independence or political balance.
 
 Story-level primary-material records are additionally bounded to reviewed HTTPS links without embedded credentials, an explicit material type, and a relevance note. Claim-to-primary-material attachments preserve an explicit supporting, contradicting, or context relationship; neither display treats a linked fact check or official record as a blanket verification result.
 
 New claim evidence must include a bounded attributed source span. Claim type and all six status values are schema-validated; a `confirmed` assessment is rejected without a linked supporting primary material or fact check. Tests currently cover these deterministic validation rules. The next evidence evaluation fixture must measure whether reviewer-entered spans actually support the atomic claim and whether status assessment remains appropriate as conflicting evidence arrives.
 
 Correction inputs require an existing, same-story target and a bounded explanation. A correction and the `story-derived-v1` report-count recomputation run in one SQLite transaction; tests cover the validation boundary, while a targeted integration fixture remains required before claiming broad correction-workflow coverage.
+
+`evals/blindspots.json` is a versioned regression set for the first geographic coverage-gap check. It verifies both a qualified observed gap and an adequate sample that includes the expected country. Unit cases also prove that undersized samples are withheld. The method requires an explicit reviewed target, at least five reports, three publications, two countries, 80% coverage review, and complete country/reporting-chain provenance; it does not infer motive, balance, or source quality.
 
 Claim-to-primary-material evidence is now validated to the same story as the claim. Reader output labels publisher-report evidence and primary-material evidence separately; both use discrete support, contradiction, or context relationships and neither becomes an automatic verdict.
 

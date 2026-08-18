@@ -58,6 +58,7 @@ erDiagram
 | **ClaimAssessment** | An append-only, operator-authored status assessment with rationale and method version. The full vocabulary is Confirmed, Well supported, Contested, Unverified, Contradicted, and Opinion; Confirmed requires linked supporting primary material or a fact check. |
 | **EvidenceCorrection** | Append-only operator correction against one existing claim, claim-evidence record, primary material, coverage record, or summary. It includes a bounded note, method version, and timestamp; it never overwrites the original record. |
 | **StoryRecomputation** | An auditable run that refreshes stored derived values. Current `story-derived-v1` recomputes the active member-report count used for importance and records its reason/result atomically with a correction where applicable. |
+| **GeographicBlindspotScope** | An operator-reviewed expected source country plus rationale for a single story. The deterministic `geographic-coverage-gap-v1` consumes it only after strict report/source/country/coverage/provenance thresholds; it can be unavailable, represented, or an observed sample gap. |
 
 The implemented model currently stores publisher-report evidence and reviewed primary-material evidence as separate claim relations, each with its own support/contradiction/context stance and note. It does not yet extract source spans or treat either relation as automatic verification.
 | **AnalysisRun** | Cross-cutting immutable record for model/provider/template/schema/input hash/cost/timing/error. Other analysis records point to it. |

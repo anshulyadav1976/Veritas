@@ -1,0 +1,24 @@
+[
+  {
+    "expectedCountryCode": "US",
+    "reports": [
+      { "sourceId": "a", "countryCode": "GB", "reviewed": true, "chainId": "1" },
+      { "sourceId": "b", "countryCode": "GB", "reviewed": true, "chainId": "2" },
+      { "sourceId": "c", "countryCode": "FR", "reviewed": true, "chainId": "3" },
+      { "sourceId": "d", "countryCode": "FR", "reviewed": true, "chainId": "4" },
+      { "sourceId": "e", "countryCode": "GB", "reviewed": true, "chainId": "5" }
+    ],
+    "state": "observed_gap"
+  },
+  {
+    "expectedCountryCode": "US",
+    "reports": [
+      { "sourceId": "a", "countryCode": "GB", "reviewed": true, "chainId": "1" },
+      { "sourceId": "b", "countryCode": "FR", "reviewed": true, "chainId": "2" },
+      { "sourceId": "c", "countryCode": "US", "reviewed": true, "chainId": "3" },
+      { "sourceId": "d", "countryCode": "GB", "reviewed": true, "chainId": "4" },
+      { "sourceId": "e", "countryCode": "FR", "reviewed": true, "chainId": "5" }
+    ],
+    "state": "represented"
+  }
+]

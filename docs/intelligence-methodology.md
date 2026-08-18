@@ -33,6 +33,8 @@ Compare a story’s evidence set rather than asking a model to label every artic
 
 A blindspot is a carefully qualified lopsided-coverage signal, not proof that a constituency hid a story. Calculate distributions from **deduplicated reporting chains** in an explicit monitored source pool and window. Show the denominator, source-pool composition, unclassified share, owner/wire concentration, region/sector dimension, and sample minimum. Do not show one when coverage is sparse, dominated by unclassified sources, or source pool imbalance makes comparison misleading.
 
+The implemented first check is narrower: an owner supplies a reviewed expected source country for one story. It only reports an observed gap when there are at least five reports, three publications, two represented countries, 80% reviewed coverage records, and a country plus reporting-chain record for every report. It says only that the reviewed sample has no report from that country—not that anyone intentionally omitted it. Any missing condition is displayed as unavailable. This follows the general sampling discipline that small or non-representative samples should not support fine-grained claims, as described in the [Reuters Institute methodology](https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024/methodology).
+
 Political, geographic, and sector/community blindspots are separate dimensions. Exposure and media-diet analytics are opt-in and describe reading patterns, never a moral score.
 
 ## Ownership and provenance

@@ -11,6 +11,7 @@ import { saveStorySummary } from "@/lib/story-summaries";
 import { addPrimaryMaterial } from "@/lib/primary-materials";
 import { saveCoverage, saveTopic } from "@/lib/coverage";
 import { recordCorrection, recomputeStory } from "@/lib/corrections";
+import { saveGeographicBlindspotScope } from "@/lib/blindspots";
 
 export async function addClaim(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized");
@@ -51,3 +52,4 @@ export async function setTopic(formData: FormData) { if (!(await isOwner())) thr
 export async function setCoverage(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveCoverage({storyId,articleId:String(formData.get("articleId")??""),coverageForm:String(formData.get("coverageForm")??""),focusNote:String(formData.get("focusNote")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function correctEvidence(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); const [targetType,targetId] = String(formData.get("target")??"").split(":", 2); recordCorrection({storyId,targetType,targetId,note:String(formData.get("note")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
 export async function recomputeStoryData(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); recomputeStory({storyId,reason:String(formData.get("reason")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }
+export async function setGeographicBlindspotScope(formData: FormData) { if (!(await isOwner())) throw new Error("Unauthorized"); const storyId=String(formData.get("storyId")??""); saveGeographicBlindspotScope({storyId,expectedCountryCode:String(formData.get("expectedCountryCode")??""),rationale:String(formData.get("rationale")??"")}); revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`); }

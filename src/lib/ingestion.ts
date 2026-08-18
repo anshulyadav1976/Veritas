@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import { canAutoJoinStory, headlineSimilarity } from "@/lib/clustering";
+import { clusterDecision } from "@/lib/clustering";
 import { db } from "@/lib/db";
 import { runMigrations } from "@/lib/migrations";
 import type { ArticleCandidate } from "@/lib/providers/types";
@@ -20,13 +20,15 @@ export function ingestCandidate(candidate: ArticleCandidate) {
         .run(candidate.rawUrl, articleId);
     }
     if (inserted.changes === 0) return { articleId, storyId: null, duplicate: true };
-    const stories = db.prepare("SELECT id, headline FROM stories WHERE state IN ('developing', 'active') ORDER BY updated_at DESC LIMIT 200").all() as Array<{ id: string; headline: string }>;
-    const matching = stories.find((story) => canAutoJoinStory(story.headline, candidate.title));
+    const stories = db.prepare("SELECT stories.id, stories.headline, MAX(articles.published_at) AS publishedAt FROM stories LEFT JOIN story_articles ON story_articles.story_id=stories.id AND story_articles.decision!='rejected' LEFT JOIN articles ON articles.id=story_articles.article_id WHERE stories.state IN ('developing', 'active') GROUP BY stories.id ORDER BY stories.updated_at DESC LIMIT 200").all() as Array<{ id: string; headline: string; publishedAt: string | null }>;
+    const match = stories.map((story)=>({story,decision:clusterDecision({headline:story.headline,publishedAt:story.publishedAt},{headline:candidate.title,publishedAt:candidate.publishedAt})})).find(({decision})=>decision.join);
+    const matching = match?.story;
     const storyId = matching?.id ?? randomUUID();
     if (!matching) db.prepare("INSERT INTO stories (id, headline, summary, state, importance) VALUES (?, ?, ?, 'developing', 0)").run(storyId, candidate.title, candidate.excerpt ?? null);
-    const score = matching ? headlineSimilarity(matching.headline, candidate.title) : 1;
-    db.prepare("INSERT INTO story_articles (story_id, article_id, decision, score, reason_json, algorithm_version) VALUES (?, ?, 'automatic', ?, ?, 'headline-jaccard-v1')")
-      .run(storyId, articleId, score, JSON.stringify({ score, signal: "headline token overlap" }));
+    const decision = match?.decision;
+    const score = decision?.score ?? 1;
+    db.prepare("INSERT INTO story_articles (story_id, article_id, decision, score, reason_json, algorithm_version) VALUES (?, ?, 'automatic', ?, ?, ?)")
+      .run(storyId, articleId, score, JSON.stringify(decision ?? { score: 1, signal: "new story" }), decision?.algorithmVersion ?? "headline-time-conflict-v2");
     db.prepare("UPDATE stories SET importance = importance + 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?").run(storyId);
     return { articleId, storyId, duplicate: false };
   })();

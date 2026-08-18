@@ -1,4 +1,6 @@
 [
   { "left": "Kestrel bridge closes after vessel strike", "right": "Vessel strike closes Kestrel bridge overnight", "sameStory": true },
-  { "left": "Senator announces transport funding plan", "right": "Senator faces inquiry over election donation", "sameStory": false }
+  { "left": "Senator announces transport funding plan", "right": "Senator faces inquiry over election donation", "sameStory": false },
+  { "left": "Airport opens after storm closure", "right": "Airport closes after storm warning", "sameStory": false },
+  { "left": "Court approves bridge reconstruction funding", "right": "Court rejects bridge reconstruction funding", "sameStory": false }
 ]

@@ -247,3 +247,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 
 - Added an owner review form that attaches a reviewed primary material to an existing claim with a bounded stance/note. Public claim cards now render publisher-report and primary-material evidence as distinct evidence classes.
 - Migrations, lint, 44 unit tests, and the production build passed.
+
+## 2026-08-18 — explainable clustering signals
+
+- Replaced headline-only automatic joins with a deterministic score over headline overlap and publication-time proximity, plus hard opposing-action conflicts. The membership record persists every signal and the `headline-time-conflict-v2` version.
+- Expanded the labelled regression set with open/close and approve/reject hard negatives. A failed fixture exposed inflected verb handling; the action vocabulary was corrected before release.
+- Migrations, lint, 46 unit tests, and the production build passed.

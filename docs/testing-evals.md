@@ -49,6 +49,8 @@ Locale tests choose the first valid browser language preference, fall back deter
 
 `evals/clustering.json` is a small, version-controlled pair set that the test suite evaluates against the automatic headline-overlap rule. It is a regression tripwire, not a quality claim: it currently contains one true pair and one hard negative. Expand it with reviewed, jurisdiction-diverse examples before changing the clustering threshold or adding new signals.
 
+The current deterministic rule also tests explicit opposing-action pairs (for example, open/close and approve/reject) and recorded publication-time proximity. It remains a small regression baseline, not a claim of production-quality multilingual clustering.
+
 ## Reader-facing evidence gate
 
 Published claims must have a linked story report and an attributed note. Timeline items currently represent publication dates only. Diversity cards disclose the count of sources with recorded ownership; they do not calculate independence, political balance, or blindspots until the data model and labelled evaluation set support those claims.

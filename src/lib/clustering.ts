@@ -1,17 +1,7 @@
-export function normalizedTokens(value: string) {
-  return new Set(value.toLowerCase().match(/[\p{L}\p{N}]{3,}/gu) ?? []);
-}
-
-export function headlineSimilarity(left: string, right: string) {
-  const a = normalizedTokens(left);
-  const b = normalizedTokens(right);
-  const intersection = [...a].filter((token) => b.has(token)).length;
-  const union = new Set([...a, ...b]).size;
-  return union === 0 ? 0 : intersection / union;
-}
-
-export function canAutoJoinStory(left: string, right: string) {
-  const a = normalizedTokens(left);
-  const overlap = [...a].filter((token) => normalizedTokens(right).has(token)).length;
-  return overlap >= 3 && headlineSimilarity(left, right) >= 0.55;
-}
+export function normalizedTokens(value: string) { return new Set(value.toLowerCase().match(/[\p{L}\p{N}]{3,}/gu) ?? []); }
+export function headlineSimilarity(left: string, right: string) { const a=normalizedTokens(left),b=normalizedTokens(right),intersection=[...a].filter((token)=>b.has(token)).length,union=new Set([...a,...b]).size; return union===0?0:intersection/union; }
+const opposingActions = [["open","close"],["opens","closes"],["approve","reject"],["approves","rejects"],["win","lose"],["wins","loses"],["arrest","release"],["arrests","releases"],["increase","decrease"],["increases","decreases"]] as const;
+export type ClusterCandidate={headline:string;publishedAt?:string|null};
+export type ClusterDecision={join:boolean;score:number;headlineScore:number;timeScore:number|null;overlap:string[];conflicts:string[];algorithmVersion:string};
+export function clusterDecision(left: ClusterCandidate,right: ClusterCandidate):ClusterDecision { const a=normalizedTokens(left.headline),b=normalizedTokens(right.headline),overlap=[...a].filter((token)=>b.has(token));const conflicts=opposingActions.filter(([x,y])=>(a.has(x)&&b.has(y))||(a.has(y)&&b.has(x))).map(([x,y])=>`${x}/${y}`);const headlineScore=headlineSimilarity(left.headline,right.headline);const leftTime=left.publishedAt?Date.parse(left.publishedAt):NaN,rightTime=right.publishedAt?Date.parse(right.publishedAt):NaN;const timeScore=Number.isNaN(leftTime)||Number.isNaN(rightTime)?null:Math.max(0,1-Math.abs(leftTime-rightTime)/(72*60*60*1000));const score=headlineScore*.8+(timeScore??.5)*.2;return {join:conflicts.length===0&&overlap.length>=3&&headlineScore>=.45&&score>=.46,score,headlineScore,timeScore,overlap,conflicts,algorithmVersion:"headline-time-conflict-v2"}; }
+export function canAutoJoinStory(left:string,right:string) { return clusterDecision({headline:left},{headline:right}).join; }

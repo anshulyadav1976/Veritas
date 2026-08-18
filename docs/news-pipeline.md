@@ -45,7 +45,7 @@ The PWA consumes the public reading experience; it never performs provider inges
 
 ## Current vertical slice
 
-`pnpm ingest` reads only the reviewed RSS/Atom records in `registry/feeds.json`. Each entry is fetched with a body cap, timeout, disabled redirects, and XML `DOCTYPE` rejection. The parser produces source/article metadata, strips HTML from a short excerpt, and canonicalizes the outbound article URL.
+`pnpm ingest` reads only the reviewed RSS/Atom records in `registry/feeds.json`. `pnpm registry:validate` verifies that every non-empty record has a unique stable identity, public HTTPS feed URL, publisher country/type context, and evidence-linked review metadata before it is accepted. Before each acquisition, the host is re-resolved and local/private/reserved answers are rejected. Each entry is then fetched with a body cap, timeout, disabled redirects, and XML `DOCTYPE` rejection. The parser produces source/article metadata, strips HTML from a short excerpt, and canonicalizes the outbound article URL.
 
 The original feed URL is retained in `article_aliases` when canonicalization changes it. Canonical URL uniqueness prevents a repeat feed item from becoming a second article. New reports receive a transparent headline-overlap clustering decision; the reader can see the stored decision and algorithm version on the story page.
 

@@ -20,11 +20,16 @@ function nonPublicIp(address: string): boolean {
   return true;
 }
 
-export async function safeProviderBaseUrl(value: string, resolver: Resolver = (hostname) => dnsLookup(hostname, { all: true, verbatim: true })) {
+export async function safePublicHttpsUrl(value: string, resolver: Resolver = (hostname) => dnsLookup(hostname, { all: true, verbatim: true })) {
   const url = new URL(value);
-  if (url.protocol !== "https:" || url.username || url.password || (url.port && url.port !== "443")) throw new Error("Custom provider URLs must use public HTTPS without credentials");
+  if (url.protocol !== "https:" || url.username || url.password || (url.port && url.port !== "443")) throw new Error("URL must use public HTTPS without credentials");
   const hostname = url.hostname.replace(/^\[|\]$/g, "");
   const addresses = isIP(hostname) ? [{ address: hostname }] : await resolver(hostname);
-  if (addresses.length === 0 || addresses.some(({ address }) => nonPublicIp(address))) throw new Error("Custom provider URL must resolve only to public addresses");
+  if (addresses.length === 0 || addresses.some(({ address }) => nonPublicIp(address))) throw new Error("URL must resolve only to public addresses");
   return url.toString();
+}
+
+export async function safeProviderBaseUrl(value: string, resolver?: Resolver) {
+  try { return await safePublicHttpsUrl(value, resolver); }
+  catch (error) { throw new Error(`Custom provider ${error instanceof Error ? error.message : "URL was rejected"}`); }
 }

@@ -33,7 +33,7 @@ Run verification with `pnpm lint`, `pnpm test`, and `pnpm build`.
 
 Provider credentials can be supplied from `.env` for local/self-hosted use. The owner-only `/settings` dashboard can also store them, encrypted at rest, when both `VERITAS_ENCRYPTION_KEY` and `VERITAS_ADMIN_PASSWORD` are configured. Saved secrets are never returned after saving. Never commit `.env` or the `data/` directory.
 
-To add an RSS or Atom source, add a reviewed feed record to `registry/feeds.json`, then run `pnpm ingest`. Veritas stores metadata and a short attributed excerpt—not full article copies—and links readers to the publisher’s canonical page.
+To add an RSS or Atom source, add a reviewed feed record to `registry/feeds.json`, run `pnpm registry:validate`, then run `pnpm ingest`. Each record needs a public HTTPS feed URL, source country/type, and evidence-linked review metadata. Veritas stores metadata and a short attributed excerpt—not full article copies—and links readers to the publisher’s canonical page.
 
 ## Documentation
 

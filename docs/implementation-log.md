@@ -220,3 +220,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added owner-reviewed, story-level records for primary documents, official records/data, and fact checks. Each requires a bounded public HTTPS link, title, explicit type, relevance note, optional ISO-8601 UTC date, and method version.
 - The reader presents these as relevant evidence links, not a verification verdict, and no server-side fetch is performed. Claim-to-primary-material associations and any fact-check search provider remain intentionally deferred.
 - `pnpm db:migrate`, `pnpm lint`, `pnpm test` (36 tests), and `pnpm build` passed.
+
+## 2026-08-18 — reviewable feed-registry contributions
+
+- Added `pnpm registry:validate` and a bounded registry schema. Each feed contribution must have a unique ID/URL, public HTTPS feed and review-evidence links, country/type context, ISO-8601 review date, and versioned review method.
+- RSS acquisition now applies the existing public-HTTPS/DNS check immediately before fetching. It rejects loopback, private, reserved, and DNS-rebound targets without adding a public registry-write surface.
+- Registry validation, migrations, lint, 39 unit tests, and the production build passed.

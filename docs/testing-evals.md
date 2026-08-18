@@ -39,6 +39,8 @@ Automated tests prove mechanics; they do not prove political or factual fairness
 
 The MCP command is additionally smoke-tested with a local stdio JSON-RPC initialization, tool listing, and `veritas_list_stories` call. The check asserts the server starts, advertises only its read tools, and keeps protocol stdout parseable.
 
+Registry tests require evidence-linked review metadata, unique IDs/URLs, and public HTTPS feed addresses. The shared endpoint-policy tests also cover a private DNS answer before acquisition; ordinary tests make no live feed request.
+
 Browser-local following tests validate that malformed storage is ignored and only unique UUIDs are retained; the UI still needs interactive browser coverage when that runner becomes available in this environment.
 
 ## Labelled clustering baseline

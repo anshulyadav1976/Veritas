@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+import { safePublicHttpsUrl } from "../provider-url";
 import { canonicalizeUrl } from "../url";
 import type { ArticleCandidate, FeedDefinition } from "./types";
 
@@ -40,7 +41,8 @@ export function parseRssOrAtom(feed: FeedDefinition, xml: string): ArticleCandid
 }
 
 export async function fetchRss(feed: FeedDefinition) {
-  const response = await fetch(feed.url, { headers: { Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9" }, redirect: "error", signal: AbortSignal.timeout(10_000) });
+  const url = await safePublicHttpsUrl(feed.url);
+  const response = await fetch(url, { headers: { Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9" }, redirect: "error", signal: AbortSignal.timeout(10_000) });
   if (!response.ok) throw new Error(`Feed ${feed.id} responded ${response.status}`);
   if (Number(response.headers.get("content-length") ?? 0) > MAX_FEED_BYTES) throw new Error(`Feed ${feed.id} exceeds ${MAX_FEED_BYTES} bytes`);
   return parseRssOrAtom(feed, await response.text());

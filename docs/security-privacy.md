@@ -22,6 +22,8 @@ This follows the threat model in the [OWASP SSRF Prevention Cheat Sheet](https:/
 
 The owner dashboard currently allows a custom base URL only for an OpenAI-compatible credential. It requires HTTPS, no embedded credentials, the default HTTPS port, and DNS answers that are all public; direct/private, loopback, link-local, carrier-grade NAT, reserved, multicast, unique-local, and IPv4-mapped private addresses are refused. Dashboard endpoints are resolved and checked again immediately before each connection-test or grounded-Q&A request; redirects are disabled. Environment variables remain an explicit operator-controlled escape hatch for local development or a private model gateway; do not expose a dashboard that can reach such a gateway to untrusted users.
 
+The same public-HTTPS/DNS policy is applied immediately before every configured RSS/Atom fetch. Registry validation makes unsafe configuration reviewable, and request-time resolution protects against literal/private targets and later DNS changes. Self-hosters who require a private feed must make an explicit code-level policy change rather than gaining that capability through the public registry format.
+
 ### Public evidence links
 
 Primary-material records store a reviewed HTTPS URL but never fetch it server-side. Links reject embedded credentials and render as ordinary `noreferrer` outbound links. This prevents the record feature from becoming an SSRF path; the review requirement remains necessary because a safe link is not necessarily a trustworthy or relevant one.

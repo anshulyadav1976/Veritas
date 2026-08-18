@@ -16,6 +16,7 @@
     "ingest": "tsx scripts/ingest.ts",
     "ingest:queue": "tsx scripts/queue-ingest.ts",
     "ingest:gdelt": "tsx scripts/ingest-gdelt.ts",
+    "registry:validate": "tsx scripts/validate-registry.ts",
     "worker": "tsx scripts/worker.ts",
     "mcp": "tsx scripts/mcp.ts"
   },

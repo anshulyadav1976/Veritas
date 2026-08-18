@@ -87,3 +87,10 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 ### Research consulted
 
 - [OWASP REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html) for server-side input/access-control boundaries and safe management endpoint behavior.
+
+## 2026-08-18 — opt-in GDELT discovery
+
+- Added a validated `pnpm ingest:gdelt -- '<query>' [timespan]` command for GDELT DOC 2.0 ArticleList discovery.
+- The fixed endpoint uses HTTPS, a timeout, disabled redirects, and a bounded JSON response. Each external record is validated independently; malformed items are dropped without accepting malformed JSON as source data.
+- GDELT is deliberately query-driven and not scheduled by default. It is discovery metadata only and never represented as source assessment or verification.
+- Fixture parsing, linting, tests, and the production build passed. An isolated live request reached GDELT but received HTTP 429; the command now reports that rate limit without retrying or creating background load.

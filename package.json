@@ -14,6 +14,7 @@
     "test:watch": "vitest",
     "db:migrate": "tsx scripts/migrate.ts",
     "ingest": "tsx scripts/ingest.ts",
+    "ingest:gdelt": "tsx scripts/ingest-gdelt.ts",
     "worker": "tsx scripts/worker.ts"
   },
   "dependencies": {

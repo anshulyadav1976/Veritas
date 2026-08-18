@@ -25,3 +25,14 @@ A provider yields normalized candidates plus provider provenance, never unverifi
 ## Source registry data
 
 The initial registry contains only original community/maintainer assertions with citations, review timestamps, confidence, and methodology. Licensed rating providers may be queried through adapters only where their terms allow; proprietary AllSides, MBFC, and Ad Fontes data is neither scraped nor committed without explicit redistribution permission. Proposed changes should be reviewable data patches with evidence and regional methodology, subject to a later governance/moderation process.
+# Provider strategy
+
+## GDELT DOC 2.0 discovery
+
+`pnpm ingest:gdelt -- '<query>' [timespan]` is an explicit, operator-run discovery command. It uses GDELT DOC 2.0 ArticleList JSON with a fixed HTTPS endpoint, `datedesc` ordering, a 15-second timeout, disabled redirects, and a 2 MiB response cap. The query is required; Veritas does not silently select topics or run a global crawl.
+
+The command accepts GDELT’s documented duration syntax (for example `1day`, `12h`, or `2weeks`) and limits result count to the API’s documented 250-record maximum. It retains the outbound publisher URL, not a GDELT mirror, and treats GDELT source fields as discovery metadata—not a source assessment or factual verification.
+
+GDELT provides a rolling corpus and can change coverage or response fields. The parser validates the small ArticleList subset that Veritas uses and drops malformed individual records rather than trusting an unbounded response. It is intentionally not an automatic background job until self-host operators establish their own query, cadence, and retention policy.
+
+Research: [GDELT DOC 2.0 API documentation](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) documents ArticleList JSON, timespan syntax, and the 250-record maximum.

@@ -1,0 +1,118 @@
+# Veritas implementation plan
+
+## Current state
+
+This is a documentation-only planning repository. There is no application, dependency manifest, schema, Docker configuration, or CI yet. The intended product is an open-source, evidence-first news intelligence web app and PWA; it is not a publisher or a truth oracle.
+
+## Decisions and assumptions
+
+- **Architecture:** TypeScript modular monolith: one Next.js web/API process and one in-process/single-worker scheduler from the same repository. SQLite is the system of record. This matches a single self-hosted instance and removes a database service; a split Python worker is deferred until NLP needs justify it.
+- **Initial stack:** Node LTS, TypeScript, Next.js 16.x App Router, React, pnpm, SQLite with WAL mode via `better-sqlite3`, SQL migrations, Zod, a simple database-backed jobs table plus a single-worker lock, Vitest, and Playwright. Use `@mozilla/readability` only if extraction becomes necessary; avoid it in Phase 0 where feed metadata suffices.
+- **Repo shape when implementation starts:** `apps/web`, `apps/worker`, `packages/core`, `packages/providers`, `docs`, and `data`. Do not create more packages until a real boundary appears.
+- **Default discovery:** curated RSS/Atom feeds plus GDELT DOC 2.0 discovery. Any commercial or credentialed provider is optional/BYOK.
+- **Initial clustering:** deterministic URL and exact/near-duplicate suppression; then a transparent time-windowed hybrid score over normalized headline tokens, entities, date/location compatibility, and optional embeddings. Store the reasons/scores. Do not use an LLM to decide every cluster.
+- **Analysis boundary:** global story intelligence is cached and versioned. Per-user work only ranks, filters, and records opted-in settings/reading state.
+- **Licence recommendation:** use AGPL-3.0-or-later for application code if the maintainers want hosted modifications returned to the community; it is intentionally stricter for network services and can deter some commercial adopters. Do not select a data licence or add `LICENSE` until the maintainers confirm contributor/governance policy. Original registry contributions should be separated from third-party data and include per-record provenance/licence.
+
+## Explicit non-goals
+
+No native apps, Kafka, Kubernetes, Redis cluster, Elasticsearch, Neo4j, GraphQL, microservices, custom auth, custom analytics, custom vector database, autonomous fact checking, full-article mirroring, or public API/MCP server in the first usable release.
+
+## Milestones
+
+### M0 — repository and local foundation
+
+Depends on: this plan approved.
+
+- [ ] Confirm product name, AGPL recommendation, and contributor/data licence policy; add legal notices only after confirmation.
+- [x] Create the TypeScript Next.js application and a separate one-shot worker command; no speculative packages.
+- [x] Add local SQLite configuration, WAL/foreign-key/busy-timeout pragmas, migrations, a jobs table, and a safe `.env.example` with no real credentials.
+- [x] Add Zod, Vitest, ESLint, production build verification, and explicit pnpm build-script approvals. Playwright/CI begin with Phase 1 UI flows.
+- [x] Implement a minimal anonymous-read editorial shell and defer authentication until saved preferences require it.
+
+Acceptance: a contributor can start the empty shell and SQLite database locally from documented commands; checks run without live provider credentials.
+
+### M1 — ingestion vertical slice
+
+Depends on: M0.
+
+- [ ] Define the minimum candidate article/source domain types and provider contract, with a real RSS adapter and a real GDELT adapter only.
+- [ ] Create a curated, version-controlled RSS feed registry with provenance, region/language/category metadata, and an explicit contributor format.
+- [ ] Implement canonical URL normalization with fixtures covering tracking parameters, query ordering, fragments, AMP paths, and redirect/canonical-link evidence.
+- [ ] Persist permitted article metadata, discovery provenance, fetch status, canonical URL, timestamps, language, and a bounded attributed snippet; do not archive full text by default.
+- [ ] Deduplicate exact URLs and materially identical feed entries; retain aliases and source provenance rather than discarding evidence.
+- [ ] Schedule idempotent ingestion and retry with provider-aware backoff; expose job records for debugging.
+
+Acceptance: fixtures and a small local feed run through discovery → normalized articles → deduplicated records, with links back to origin.
+
+### M2 — stories and public reading loop
+
+Depends on: M1.
+
+- [ ] Implement the explainable hybrid clustering baseline and a reviewable story membership decision log.
+- [ ] Add manual merge/split controls restricted to operators; record supersession rather than rewrite history.
+- [ ] Produce canonical story headline/summary only from selected cluster evidence, with schema validation and explicit “early/developing” states.
+- [ ] Add source registry fundamentals: canonical identity, country/region/language/type, ownership assertions, and source assessments with evidence/review timestamps.
+- [ ] Build public home, topic/region feed, and story overview pages. Show article/source and independent-chain counts, original links, and provenance—not premature political charts.
+
+Acceptance: a user can browse a correctly clustered story, inspect its articles and original links, and see why it exists.
+
+### M3 — useful public product
+
+Depends on: M2.
+
+- [ ] Add account/auth through a replaceable library or adapter, preferences, saved stories, and basic topic/region ranking with clear controls.
+- [ ] Add source-profile displays; keep historical orientation, reliability, and article-level analysis visibly separate.
+- [ ] Add versioned, schema-validated global summaries and article analyses only where sufficient evidence exists; provide per-finding citations.
+- [ ] Add perspective comparison that reports observed coverage/framing differences, sample size, unknown/unclassified share, and caveats.
+- [ ] Implement settings, encrypted BYOK credentials, provider test/delete flows, safe custom endpoint validation, and a security review.
+- [ ] Add installable PWA shell and offline fallback/saved-story cache after core browsing is solid.
+
+Acceptance: mobile and desktop users can personalize a transparent feed, save stories, inspect source evidence, and configure credentials without secrets reaching the browser after storage.
+
+### M4 — evidence intelligence
+
+Depends on: M3 and labelled evaluation data.
+
+- [ ] Extract atomic factual claims from high-importance stories; require validated schemas, source spans, and analysis versions.
+- [ ] Associate supporting and contradicting evidence separately; use primary sources and fact-check search as evidence, never model memory as verification.
+- [ ] Ship discrete statuses: Confirmed, Well supported, Contested, Unverified, Contradicted, or Opinion/prediction/not fact-checkable.
+- [ ] Add reporting-chain and ownership diversity, a conservative blindspot calculation, and provenance-rich timeline entries.
+- [ ] Add an evaluation gate for every reader-facing intelligence output and a correction/recompute path.
+
+Acceptance: every displayed status, diversity metric, and timeline item links to evidence and states limitations.
+
+### M5 — later platform work
+
+Depends on: M4 maturity, operating experience, and governance.
+
+- [ ] Grounded “Ask this story” with evidence-only retrieval and citations.
+- [ ] Opt-in media-diet analytics, followed stories, controlled notifications/daily brief, internationalized UI, community registry workflow, public API, then MCP.
+
+## Quality gates
+
+- Deterministic tests cover URL/source matching, provider parsing, dedupe, clustering, ranking, ownership resolution, blindspot calculations, schemas, redaction, and SSRF checks.
+- Versioned eval fixtures measure clustering, summary/source attribution, claim decomposition/status, framing, omissions, primary-source grounding, and prompt-injection resistance.
+- UI changes receive keyboard, screen-reader, contrast, reduced-motion, mobile, and WebKit/Chromium Playwright coverage. Run the web-design-guidelines review skill once installed.
+
+## Principal risks and responses
+
+| Risk | Response |
+| --- | --- |
+| Copyright/terms | Metadata + short attributed snippets by default; per-provider retention rules; no implied redistribution rights. |
+| Misleading political/factual labels | Distinct models, evidence, confidence bands, review workflow, unknown states, and no universal US spectrum. |
+| Incorrect clusters | Conservative automatic joins, reversible merge/split history, labelled pair/cluster evals, and operator review. |
+| Circular reporting | Record publisher, wire/reprint clues, ownership and reporting-chain lineage; calculate diversity from chains, not URLs. |
+| LLM errors or injection | Untrusted-content boundary, structured validation, citations, versions, evals, least-privilege tools, and fallbacks. |
+| BYOK abuse/SSRF | Encrypt secrets, never return/log them, validate and resolve custom hosts safely, block private/link-local targets and redirects. |
+| SQLite concurrency ceiling | Enforce one writer/worker; document Postgres as an optional future migration only if a self-hosted instance outgrows that boundary. |
+
+## Decisions needing maintainer input
+
+1. Confirm the name “Veritas” is safe and desired for a public open-source project.
+2. Confirm AGPL-3.0-or-later for code, and choose a separate contributor licence/governance policy for original registry data after legal review.
+3. Decide whether Phase 0 is anonymous-public only (recommended) or must include accounts.
+
+## First implementation task
+
+After approval, perform M0 only: scaffold the workspace, SQLite persistence, safe environment validation, and test/build baseline. Do not begin ingestion in the same change.

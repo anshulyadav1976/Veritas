@@ -226,3 +226,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added `pnpm registry:validate` and a bounded registry schema. Each feed contribution must have a unique ID/URL, public HTTPS feed and review-evidence links, country/type context, ISO-8601 review date, and versioned review method.
 - RSS acquisition now applies the existing public-HTTPS/DNS check immediately before fetching. It rejects loopback, private, reserved, and DNS-rebound targets without adding a public registry-write surface.
 - Registry validation, migrations, lint, 39 unit tests, and the production build passed.
+
+## 2026-08-18 — locale-aware reader rendering
+
+- Added a safe `Accept-Language` parser for the root document language and server-rendered home, story, and source-profile timestamps. Invalid language tags fall back to English; invalid dates are labelled unavailable rather than rendered misleadingly.
+- English remains the current copy language. This change provides display localization without claiming translated editorial content or changing source-language metadata.
+- Migrations, lint, 41 unit tests, and the production build passed.

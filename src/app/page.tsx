@@ -1,12 +1,10 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 
+import { formatDateTime, preferredLocale } from "@/lib/locale";
 import { listStories } from "@/lib/stories";
 
 export const dynamic = "force-dynamic";
-
-function formatTime(timestamp: string) {
-  return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(new Date(timestamp));
-}
 
 const regions = [{ code: undefined, label: "Global" }, { code: "US", label: "United States" }, { code: "GB", label: "United Kingdom" }, { code: "IN", label: "India" }];
 
@@ -14,6 +12,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const selectedRegion = (await searchParams).region?.toUpperCase();
   const region = regions.some((item) => item.code === selectedRegion) ? selectedRegion : undefined;
   const stories = listStories(30, region);
+  const locale = preferredLocale((await headers()).get("accept-language"));
 
   return (
     <main id="main-content" className="shell">
@@ -43,7 +42,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
             {stories.map((story) => (
               <li key={story.id}>
                 <article className="story">
-                  <p className="eyebrow">{story.state} · {formatTime(story.updatedAt)}</p>
+                  <p className="eyebrow">{story.state} · {formatDateTime(story.updatedAt, locale, { dateStyle: "medium", timeStyle: "short" }) ?? "Update time unavailable"}</p>
                   <h3><Link href={`/stories/${story.id}`}>{story.headline}</Link></h3>
                   {story.summary && <p>{story.summary}</p>}
                   <p className="metrics">{story.articleCount} articles · {story.sourceCount} publications</p>

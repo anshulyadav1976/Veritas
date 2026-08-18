@@ -1,21 +1,19 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
+import { formatDateTime, preferredLocale } from "@/lib/locale";
 import { getSourceProfile } from "@/lib/stories";
 import { isOwner } from "@/lib/owner-session";
 
 export const dynamic = "force-dynamic";
 
-function formatDate(value: string | null) {
-  if (!value) return "Date unavailable";
-  const date = new Date(value);
-  return Number.isNaN(date.valueOf()) ? "Date unavailable" : new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
-}
-
 export default async function SourcePage({ params }: { params: Promise<{ domain: string }> }) {
   const source = getSourceProfile(decodeURIComponent((await params).domain));
   if (!source) notFound();
   const owner = await isOwner();
+  const locale = preferredLocale((await headers()).get("accept-language"));
+  const formatDate = (value: string | null) => formatDateTime(value, locale, { dateStyle: "medium" }) ?? "Date unavailable";
   return <main id="main-content" className="shell">
     <header className="masthead"><Link className="wordmark" href="/">VERITAS</Link><p>Source profile</p></header>
     <section className="brief"><p className="eyebrow">Publisher identity</p><h1>{source.name}</h1><p className="lede">{source.domain} · {source.countryCode ?? "Country unrecorded"} · {source.languageTag ?? "Language unrecorded"} · {source.sourceType ?? "Type unrecorded"}</p><p className="metrics">{source.articleCount} indexed articles · {source.storyCount} linked stories</p></section>

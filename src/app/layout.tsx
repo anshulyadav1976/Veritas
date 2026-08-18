@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { headers } from "next/headers";
 
+import { preferredLocale } from "@/lib/locale";
 import "./globals.css";
 import { PwaRegister } from "./pwa-register";
 
@@ -10,9 +12,10 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = { themeColor: "#f7f8f6" };
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const locale = preferredLocale((await headers()).get("accept-language"));
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body><a className="skip-link" href="#main-content">Skip to content</a><PwaRegister/>{children}</body>
     </html>
   );

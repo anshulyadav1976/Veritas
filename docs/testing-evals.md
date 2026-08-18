@@ -43,6 +43,8 @@ Registry tests require evidence-linked review metadata, unique IDs/URLs, and pub
 
 Browser-local following tests validate that malformed storage is ignored and only unique UUIDs are retained; the UI still needs interactive browser coverage when that runner becomes available in this environment.
 
+Locale tests choose the first valid browser language preference, fall back deterministically to English, and refuse to format invalid timestamps. The full production build verifies request-header rendering across the server component tree.
+
 ## Labelled clustering baseline
 
 `evals/clustering.json` is a small, version-controlled pair set that the test suite evaluates against the automatic headline-overlap rule. It is a regression tripwire, not a quality claim: it currently contains one true pair and one hard negative. Expand it with reviewed, jurisdiction-diverse examples before changing the clustering threshold or adding new signals.

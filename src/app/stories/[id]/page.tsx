@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
+import { formatDateTime, preferredLocale } from "@/lib/locale";
 import { describeMembership } from "@/lib/provenance";
 import { isOwner } from "@/lib/owner-session";
 import { getStory } from "@/lib/stories";
@@ -10,17 +12,14 @@ import { FollowStoryButton } from "../../following/follow-story-button";
 
 export const dynamic = "force-dynamic";
 
-function formatTime(timestamp: string | null) {
-  if (!timestamp) return "Publication time unavailable";
-  const value = new Date(timestamp);
-  return Number.isNaN(value.valueOf()) ? "Publication time unavailable" : new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(value);
-}
 const statusLabel = (status: string) => status.replaceAll("_", " ");
 
 export default async function StoryPage({ params }: { params: Promise<{ id: string }> }) {
   const story = getStory((await params).id);
   if (!story) notFound();
   const owner = await isOwner();
+  const locale = preferredLocale((await headers()).get("accept-language"));
+  const formatTime = (timestamp: string | null) => formatDateTime(timestamp, locale, { dateStyle: "medium", timeStyle: "short" }) ?? "Publication time unavailable";
   return <main id="main-content" className="shell">
     <RecordStoryVisit storyId={story.id}/>
     <header className="masthead"><Link className="wordmark" href="/">VERITAS</Link><p>Evidence-first news</p></header>

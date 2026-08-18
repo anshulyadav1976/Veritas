@@ -17,4 +17,4 @@ Invite data contributions as reviewable changes with citations, jurisdiction/con
 
 ## Internationalization
 
-Schema already preserves original language, locale, source-country/region, multilingual entities, and UTC timestamps. V1 can be English-first but must avoid English-only slug/text assumptions. Start translations after canonical source provenance and display date/time localization are solid. Political orientation remains contextual; “Left/Centre/Right” is a display projection only where meaningful.
+Schema already preserves original language, locale, source-country/region, multilingual entities, and UTC timestamps. The reader now uses a validated `Accept-Language` preference for document language and server-rendered date/time formatting. V1 remains English-first for copy and must avoid English-only slug/text assumptions. Start translated copy after canonical source provenance and display localization are solid. Political orientation remains contextual; “Left/Centre/Right” is a display projection only where meaningful.

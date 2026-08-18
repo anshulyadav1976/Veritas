@@ -12,6 +12,7 @@ export type ArticleCandidate = {
   providerId: string;
   source: Omit<FeedDefinition, "id" | "url"> & { domain: string };
   url: string;
+  rawUrl?: string;
   title: string;
   author?: string;
   publishedAt?: string;

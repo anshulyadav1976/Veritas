@@ -68,3 +68,22 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Requires both `VERITAS_ADMIN_PASSWORD` and a 32-byte base64 `VERITAS_ENCRYPTION_KEY`; environment credentials remain supported.
 - AES-256-GCM encryption tests plus migration, lint, test, and production-build verification passed.
 - Based on [OWASP cryptographic storage guidance](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html).
+
+## 2026-08-18 — public story reader and URL-alias provenance
+
+### Delivered
+
+- Added `article_aliases` to retain an original feed URL whenever canonicalization removes trackers or otherwise changes it.
+- Made home-page story cards navigable and added a server-rendered story page with the publisher’s original link, source metadata, bounded excerpt, join decision, score, and algorithm version.
+- Kept the source list deliberately neutral: it describes grouping evidence and explicitly says it is not a credibility verdict.
+- Added a keyboard skip link, visible focus treatment, responsive evidence trail, touch-ready buttons, and a confirmation prompt before deleting a stored credential.
+
+### Verification
+
+- `pnpm db:migrate`, `pnpm lint`, `pnpm test` (10 tests), and `pnpm build` passed.
+- A Playwright smoke test seeded an isolated SQLite database, opened the home page, followed a story card, and verified the original-reporting heading and external publisher link.
+- The UI was reviewed against the current [Web Interface Guidelines](https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md); the actionable findings addressed in this slice were skip navigation, heading wrapping, hover/focus/touch feedback, and destructive-action confirmation.
+
+### Research consulted
+
+- [OWASP REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html) for server-side input/access-control boundaries and safe management endpoint behavior.

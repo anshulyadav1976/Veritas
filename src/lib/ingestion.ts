@@ -15,6 +15,10 @@ export function ingestCandidate(candidate: ArticleCandidate) {
     const articleId = idFor("article", candidate.url);
     const inserted = db.prepare("INSERT INTO articles (id, source_id, canonical_url, title, author, published_at, language_tag, excerpt, content_hash, acquisition_provider, acquisition_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(canonical_url) DO NOTHING")
       .run(articleId, sourceId, candidate.url, candidate.title, candidate.author ?? null, candidate.publishedAt ?? null, candidate.languageTag ?? null, candidate.excerpt ?? null, createHash("sha256").update(`${candidate.title}\n${candidate.excerpt ?? ""}`).digest("hex"), candidate.provider, candidate.providerId);
+    if (candidate.rawUrl && candidate.rawUrl !== candidate.url) {
+      db.prepare("INSERT INTO article_aliases (alias_url, article_id, normalization_reason) VALUES (?, ?, 'feed-url-canonicalization') ON CONFLICT(alias_url) DO NOTHING")
+        .run(candidate.rawUrl, articleId);
+    }
     if (inserted.changes === 0) return { articleId, storyId: null, duplicate: true };
     const stories = db.prepare("SELECT id, headline FROM stories WHERE state IN ('developing', 'active') ORDER BY updated_at DESC LIMIT 200").all() as Array<{ id: string; headline: string }>;
     const matching = stories.find((story) => canAutoJoinStory(story.headline, candidate.title));

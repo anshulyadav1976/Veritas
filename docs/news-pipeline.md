@@ -41,3 +41,17 @@ Stories move `developing → active → settled → archived`, and can be `super
 ## PWA boundary
 
 The PWA consumes the public reading experience; it never performs provider ingestion or holds server secrets. Installability needs a manifest and HTTPS/localhost; a service worker is useful but not required for installability ([MDN](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable)). Phase 1 caches the app shell/offline page; saved-story offline caching comes only after privacy and stale-data behavior are clear.
+# News pipeline
+
+## Current vertical slice
+
+`pnpm ingest` reads only the reviewed RSS/Atom records in `registry/feeds.json`. Each entry is fetched with a body cap, timeout, disabled redirects, and XML `DOCTYPE` rejection. The parser produces source/article metadata, strips HTML from a short excerpt, and canonicalizes the outbound article URL.
+
+The original feed URL is retained in `article_aliases` when canonicalization changes it. Canonical URL uniqueness prevents a repeat feed item from becoming a second article. New reports receive a transparent headline-overlap clustering decision; the reader can see the stored decision and algorithm version on the story page.
+
+## Deliberate boundaries
+
+- Only explicitly configured registry feeds are fetched. No user-provided feed URL is accepted by the web application.
+- Veritas stores metadata and a bounded attributed excerpt, not a full article archive.
+- An alias proves a normalization operation, not that a publisher has declared a canonical URL. Publisher-declared canonical links and redirect evidence require a future, separately reviewed fetcher.
+- GDELT discovery is a separate provider command so a self-host can choose its query and retention implications explicitly.

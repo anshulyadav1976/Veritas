@@ -4,7 +4,7 @@ Open-source, self-hostable news intelligence: a transparent evidence layer that 
 
 ## Status
 
-Phase 0 foundation. The application starts with an editorial shell and SQLite migrations; RSS/GDELT ingestion is the next milestone. It is not yet a complete news product.
+Foundation and the first ingestion/reader slice are complete: RSS and Atom feeds can be ingested into SQLite, reports are clustered transparently, and readers can inspect original links on a story page. GDELT discovery and evidence intelligence remain in progress; this is not yet a complete news product.
 
 ## Local development
 
@@ -23,7 +23,9 @@ Run verification with `pnpm lint`, `pnpm test`, and `pnpm build`.
 
 ## Configuration and secrets
 
-Provider credentials can be supplied from `.env` for local/self-hosted use. Dashboard-managed credentials will be added in Phase 1 and require `VERITAS_ENCRYPTION_KEY`; they will be encrypted at rest and never returned after saving. Never commit `.env` or the `data/` directory.
+Provider credentials can be supplied from `.env` for local/self-hosted use. The owner-only `/settings` dashboard can also store them, encrypted at rest, when both `VERITAS_ENCRYPTION_KEY` and `VERITAS_ADMIN_PASSWORD` are configured. Saved secrets are never returned after saving. Never commit `.env` or the `data/` directory.
+
+To add an RSS or Atom source, add a reviewed feed record to `registry/feeds.json`, then run `pnpm ingest`. Veritas stores metadata and a short attributed excerpt—not full article copies—and links readers to the publisher’s canonical page.
 
 ## Documentation
 

@@ -31,9 +31,10 @@ export function parseRssOrAtom(feed: FeedDefinition, xml: string): ArticleCandid
     const title = text(item.title);
     if (!href || !title) return [];
     try {
-      const url = canonicalizeUrl(new URL(href, feed.url).toString());
+      const rawUrl = new URL(href, feed.url).toString();
+      const url = canonicalizeUrl(rawUrl);
       const excerpt = text(item.description) ?? text(item.summary) ?? text(item.content);
-      return [{ provider: "rss" as const, providerId: text(item.guid) ?? text(item.id) ?? url, source, url, title, author: text(item.author) ?? text(item["dc:creator"]), publishedAt: date(item.pubDate) ?? date(item.published) ?? date(item.updated), excerpt: excerpt ? excerptText(excerpt) : undefined, languageTag: feed.languageTag }];
+      return [{ provider: "rss" as const, providerId: text(item.guid) ?? text(item.id) ?? url, source, url, rawUrl, title, author: text(item.author) ?? text(item["dc:creator"]), publishedAt: date(item.pubDate) ?? date(item.published) ?? date(item.updated), excerpt: excerpt ? excerptText(excerpt) : undefined, languageTag: feed.languageTag }];
     } catch { return []; }
   });
 }

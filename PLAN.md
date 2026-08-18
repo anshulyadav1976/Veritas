@@ -2,7 +2,7 @@
 
 ## Current state
 
-This is a documentation-only planning repository. There is no application, dependency manifest, schema, Docker configuration, or CI yet. The intended product is an open-source, evidence-first news intelligence web app and PWA; it is not a publisher or a truth oracle.
+This repository now contains the Phase 0 foundation plus the first RSS/Atom ingestion and public story-reader slice. It is still an open-source, evidence-first news intelligence web app and PWA—not a publisher or a truth oracle. GDELT, source assessments, evidence intelligence, saved stories, and PWA offline support remain planned work.
 
 ## Decisions and assumptions
 
@@ -38,9 +38,9 @@ Depends on: M0.
 
 - [x] Define candidate article/source types and implement the RSS adapter. GDELT remains the next provider in this milestone.
 - [x] Create a version-controlled opt-in RSS feed registry; each feed record carries name, URL, country, language, and source-type metadata.
-- [ ] Implement canonical URL normalization with fixtures covering tracking parameters, query ordering, fragments, AMP paths, and redirect/canonical-link evidence.
-- [ ] Persist permitted article metadata, discovery provenance, fetch status, canonical URL, timestamps, language, and a bounded attributed snippet; do not archive full text by default.
-- [ ] Deduplicate exact URLs and materially identical feed entries; retain aliases and source provenance rather than discarding evidence.
+- [x] Implement canonical URL normalization with fixtures covering tracking parameters, query ordering, and fragments. AMP and publisher-declared canonical-link evidence are deferred because Veritas does not fetch article pages in this slice.
+- [x] Persist permitted article metadata, discovery provenance, canonical URL, timestamps, language, and a bounded attributed snippet; do not archive full text by default.
+- [x] Deduplicate exact URLs and retain a feed URL alias when canonicalization changes it. Materially-identical cross-URL dedupe is deferred until the labelled clustering evaluation exists.
 - [ ] Schedule idempotent ingestion and retry with provider-aware backoff; expose job records for debugging.
 
 Acceptance: fixtures and a small local feed run through discovery → normalized articles → deduplicated records, with links back to origin.
@@ -53,7 +53,7 @@ Depends on: M1.
 - [ ] Add manual merge/split controls restricted to operators; record supersession rather than rewrite history.
 - [ ] Produce canonical story headline/summary only from selected cluster evidence, with schema validation and explicit “early/developing” states.
 - [ ] Add source registry fundamentals: canonical identity, country/region/language/type, ownership assertions, and source assessments with evidence/review timestamps.
-- [ ] Build public home, topic/region feed, and story overview pages. Show article/source and independent-chain counts, original links, and provenance—not premature political charts.
+- [x] Build public home and story overview pages. They show report/publication counts, original links, and the stored membership decision—not premature political charts. Topic/region feeds and independent-chain counts follow source lineage work.
 
 Acceptance: a user can browse a correctly clustered story, inspect its articles and original links, and see why it exists.
 

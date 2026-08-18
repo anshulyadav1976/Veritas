@@ -12,7 +12,7 @@ export default function HomePage() {
   const stories = listStories();
 
   return (
-    <main className="shell">
+    <main id="main-content" className="shell">
       <header className="masthead">
         <Link className="wordmark" href="/" aria-label="Veritas home">VERITAS</Link>
         <p>Evidence-first news</p>
@@ -20,7 +20,7 @@ export default function HomePage() {
       <section className="brief" aria-labelledby="brief-heading">
         <p className="eyebrow">Morning brief</p>
         <h1 id="brief-heading">See the reporting behind the story.</h1>
-        <p className="lede">Veritas is ready for sources. Add feeds in the next ingestion milestone; every story will retain its original reporting and provenance.</p>
+        <p className="lede">A transparent reader for the reporting behind a story: original links, source counts, and the decision that grouped each report.</p>
       </section>
       <section aria-labelledby="stories-heading">
         <div className="section-heading">
@@ -31,7 +31,7 @@ export default function HomePage() {
           <div className="empty" role="status">
             <p className="eyebrow">No stories yet</p>
             <h2>Ingestion has not run.</h2>
-            <p>Once RSS and GDELT discovery are configured, this is where deduplicated, source-linked story clusters appear.</p>
+            <p>Add a feed to <code>registry/feeds.json</code> and run <code>pnpm ingest</code>. Deduplicated, source-linked story clusters will appear here.</p>
           </div>
         ) : (
           <ol className="story-list">
@@ -39,7 +39,7 @@ export default function HomePage() {
               <li key={story.id}>
                 <article className="story">
                   <p className="eyebrow">{story.state} · {formatTime(story.updatedAt)}</p>
-                  <h3>{story.headline}</h3>
+                  <h3><Link href={`/stories/${story.id}`}>{story.headline}</Link></h3>
                   {story.summary && <p>{story.summary}</p>}
                   <p className="metrics">{story.articleCount} articles · {story.sourceCount} publications</p>
                 </article>

@@ -237,3 +237,8 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 
 - Added operator-reviewed story topics and per-report coverage-form records (direct reporting, analysis, opinion, or unknown). The reader shows only reviewed sample counts and does not derive political orientation, accuracy, or quality.
 - Migrations, lint, 43 unit tests, and the production build passed.
+
+## 2026-08-18 — claim-to-primary-material evidence
+
+- Added a claim-to-primary-material relation with a distinct stance and bounded rationale. The database verifies that the material and claim belong to the same story, preventing cross-story evidence attachment.
+- Migrations, lint, 43 unit tests, and the production build passed.

@@ -55,6 +55,8 @@ erDiagram
 | **StoryAnalysis** | Shared canonical summary, agreed facts, uncertainty, coverage/framing findings, and cited evidence set. One active version may be displayed, but all versions remain auditable. |
 | **Claim** | Atomic, attributable proposition; exact normalized text, claim type, scope/time, extraction provenance, and a discrete verification status. Opinions/predictions are explicitly non-fact-checkable. |
 | **ClaimEvidence** | Claim → primary document, data, court/legislative filing, article, or fact-check-result link; relationship is `supports`, `contradicts`, `context`, or `mentions`; include quoted permitted span, retrieval time, strength rationale, and provenance. Supporting and contradicting evidence are never collapsed into one score. |
+
+The implemented model currently stores publisher-report evidence and reviewed primary-material evidence as separate claim relations, each with its own support/contradiction/context stance and note. It does not yet extract source spans or treat either relation as automatic verification.
 | **AnalysisRun** | Cross-cutting immutable record for model/provider/template/schema/input hash/cost/timing/error. Other analysis records point to it. |
 
 ## User and secret data

@@ -146,3 +146,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added a report-publication timeline that links every item to the original publisher and explicitly avoids claiming an event chronology.
 - Added transparent publisher/ownership-record coverage counts. Independent-chain, perspective-balance, and blindspot outputs remain unavailable until reviewed lineage/classification data exists.
 - Added a version-controlled labelled clustering pair set, exercised by the test suite as a regression baseline. Lint, 17 tests, and a production build passed.
+
+## 2026-08-18 — operational encrypted provider configuration
+
+- Added server-only OpenAI-compatible credential resolution: an encrypted dashboard credential overrides the explicit environment fallback when present.
+- Added an owner-invoked connection test against the standard Models endpoint. It has a timeout and disabled redirects, and returns only generic success/failure so provider error bodies and secrets never reach the browser.
+- Added request-shape and error-redaction tests. Lint, 19 tests, and a production build passed. The endpoint contract was verified against the official [OpenAI Models API reference](https://platform.openai.com/docs/api-reference/models/object).

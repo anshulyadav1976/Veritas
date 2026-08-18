@@ -65,7 +65,7 @@ Depends on: M2.
 - [x] Add source-profile displays; keep historical assessment/ownership records and article-level reporting visibly separate. There are no orientation/reliability labels until reviewed source-assessment data exists.
 - [ ] Add versioned, schema-validated global summaries and article analyses only where sufficient evidence exists; provide per-finding citations. The current owner workflow records human-authored claims with linked publisher evidence; it does not generate or imply a model verdict.
 - [ ] Add perspective comparison that reports observed coverage/framing differences, sample size, unknown/unclassified share, and caveats.
-- [ ] Implement settings, encrypted BYOK credentials, provider test/delete flows, safe custom endpoint validation, and a security review.
+- [x] Implement settings, encrypted BYOK credentials, provider test/delete flows, safe custom endpoint validation, and a security review. The first test flow is OpenAI-compatible only; other provider adapters need their own bounded connection contracts.
 - [ ] Add installable PWA shell and offline fallback/saved-story cache after core browsing is solid. The manifest is in place; service-worker caching is intentionally deferred to avoid stale evidence presentation.
 
 Acceptance: mobile and desktop users can personalize a transparent feed, save stories, inspect source evidence, and configure credentials without secrets reaching the browser after storage.

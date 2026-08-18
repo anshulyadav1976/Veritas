@@ -36,3 +36,9 @@ The command accepts GDELT’s documented duration syntax (for example `1day`, `1
 GDELT provides a rolling corpus and can change coverage or response fields. The parser validates the small ArticleList subset that Veritas uses and drops malformed individual records rather than trusting an unbounded response. It is intentionally not an automatic background job until self-host operators establish their own query, cadence, and retention policy.
 
 Research: [GDELT DOC 2.0 API documentation](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) documents ArticleList JSON, timespan syntax, and the 250-record maximum.
+
+## OpenAI-compatible credentials
+
+The owner dashboard can save an OpenAI-compatible key, base URL, and optional model encrypted at rest. When configured, that saved credential takes precedence over `OPENAI_API_KEY`, `OPENAI_BASE_URL`, and `OPENAI_MODEL`; otherwise the environment configuration is used. Secrets are resolved only in server code and never included in a page, API response, log, or connection-test result.
+
+The dashboard’s **Test connection** action performs a bounded, no-redirect `GET /models` request with the bearer token and reports only generic success or failure. The official OpenAI model reference documents this endpoint and its bearer authentication pattern: [Models API](https://platform.openai.com/docs/api-reference/models/object). Compatible providers must expose the same route for this test. No provider request is made unless the owner explicitly invokes the test.

@@ -50,7 +50,7 @@ Acceptance: fixtures and a small local feed run through discovery → normalized
 Depends on: M1.
 
 - [ ] Implement the explainable hybrid clustering baseline and a reviewable story membership decision log.
-- [ ] Add manual merge/split controls restricted to operators; record supersession rather than rewrite history.
+- [x] Add manual merge/split controls restricted to operators; record supersession rather than rewrite history. Both operations require bounded reasons and retain a story-operation history; split membership is rejected rather than deleted.
 - [ ] Produce canonical story headline/summary only from selected cluster evidence, with schema validation and explicit “early/developing” states.
 - [x] Add source registry fundamentals: canonical identity, country/language/type, ownership assertions, and source-assessment storage with evidence/review timestamps. The operator interface for source assessment follows once a curated source registry exists.
 - [x] Build public home, regional feed, source profile, and story overview pages. They show report/publication counts, original links, publisher-level record boundaries, and stored membership decisions—not premature political charts. Topic classification and independent-chain counts follow source lineage work.

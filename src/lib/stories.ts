@@ -32,7 +32,8 @@ export type StoryArticle = {
 
 export type StoryClaim = { id: string; text: string; status: string; analysisVersion: string; createdAt: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string };
 export type StoryDiversity = { sourceCount: number; sourcesWithOwnership: number; recordedOwnerGroups: number };
-export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; diversity: StoryDiversity };
+export type StoryOperation = { id: string; action: string; reason: string; relatedStoryId: string | null; createdAt: string };
+export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; diversity: StoryDiversity; operations: StoryOperation[] };
 
 export type SourceProfile = {
   id: string; name: string; domain: string; countryCode: string | null; languageTag: string | null; sourceType: string | null;
@@ -133,5 +134,6 @@ export function getStory(id: string): StoryDetail | null {
     LEFT JOIN ownership_assertions ON ownership_assertions.source_id = sources.id
     WHERE story_articles.story_id = ? AND story_articles.decision != 'rejected'
   `).get(id) as StoryDiversity;
-  return { ...story, articles, claims, diversity };
+  const operations = db.prepare("SELECT id, action, reason, related_story_id AS relatedStoryId, created_at AS createdAt FROM story_operations WHERE story_id = ? OR related_story_id = ? ORDER BY created_at DESC").all(id, id) as StoryOperation[];
+  return { ...story, articles, claims, diversity, operations };
 }

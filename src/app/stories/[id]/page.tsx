@@ -44,6 +44,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
         <div className="section-heading"><h2 id="claims-heading">Claims & evidence</h2>{owner && <span className="owner-tools"><Link href={`/stories/${story.id}/ask`}>Ask story</Link><Link href={`/stories/${story.id}/review`}>Add evidence</Link></span>}</div>
         {story.claims.length === 0 ? <p className="empty-copy">No reviewed claim records have been published. Reports above are the available evidence trail.</p> : <ol className="claim-list">{story.claims.map((claim) => <li key={claim.id}><p className="eyebrow">{statusLabel(claim.status)} · {claim.analysisVersion}</p><h3>{claim.text}</h3><p>{claim.stance}: <a href={claim.articleUrl} target="_blank" rel="noreferrer">{claim.sourceName} — {claim.articleTitle}</a></p><blockquote>{claim.note}</blockquote></li>)}</ol>}
       </section>
+      {story.operations.length > 0 && <section className="operations" aria-labelledby="operations-heading"><div className="section-heading"><h2 id="operations-heading">Story history</h2><span>{story.operations.length} operations</span></div><ol className="plain-list">{story.operations.map((operation) => <li key={operation.id}><span>{operation.action} · {operation.reason}</span><span className="metrics">{operation.createdAt}</span></li>)}</ol></section>}
     </article>
   </main>;
 }

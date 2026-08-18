@@ -170,3 +170,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added an owner-only source review form for evidence-linked historical assessment records and dated ownership assertions with a bounded confidence field.
 - Public profiles keep these records separate from individual articles and explain that no assessment is a verdict on a particular report.
 - Lint, 24 tests, and the production build passed.
+
+## 2026-08-18 — reversible story review
+
+- Added owner-only merge and split operations with required reasons. Merges supersede the source story and preserve its memberships; splits reject the original membership and create a reviewed membership in a new story.
+- Every operation is recorded in `story_operations` and shown as story history instead of silently rewriting clustering decisions.
+- Migrations, lint, 26 unit tests, a production build, and an isolated SQLite merge/split transaction smoke test passed.

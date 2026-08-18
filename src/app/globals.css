@@ -54,6 +54,8 @@ h3 { font-size: clamp(1.6rem, 3vw, 2.25rem); line-height: 1.05; }
 .diversity dt { color: var(--slate); font: .68rem/1.4 ui-monospace, "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .04em; }
 .diversity dd { margin-top: 8px; font: 500 1.4rem/1 Georgia, "Newsreader", serif; }
 .profile-section { margin-top: 48px; }
+.operator-section, .operations { margin-top: 52px; }
+.operator-section h2 { font-size: 1.8rem; }
 .profile-section > p { max-width: 62ch; line-height: 1.6; }
 .plain-list { list-style: none; margin: 0; padding: 0; }
 .plain-list li { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }

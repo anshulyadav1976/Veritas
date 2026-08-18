@@ -35,7 +35,7 @@ Version source data, annotations, scorer, prompt/template, model, and evaluation
 Automated tests prove mechanics; they do not prove political or factual fairness. Ship a reader-facing intelligence feature only with a baseline, documented sample/method limits, a release threshold, sampled human review, and rollback/disable path. Re-run evaluations after provider/model/prompt/methodology changes, and keep reports attached to analysis versions. Corrections become new fixture cases.
 ## Current implemented baseline
 
-`pnpm lint`, `pnpm test`, and `pnpm build` are required locally and in CI. Tests cover URL canonicalization, XML parsing limits, conservative clustering, encrypted credentials, provider endpoint SSRF policy, claim input validation, and GDELT record parsing.
+`pnpm db:migrate`, `pnpm lint`, `pnpm test`, and `pnpm build` are required locally and in CI. Tests cover URL canonicalization, XML parsing limits, conservative clustering, encrypted credentials, provider endpoint SSRF policy, claim and reviewed-summary input validation, and GDELT record parsing.
 
 ## Labelled clustering baseline
 
@@ -44,3 +44,7 @@ Automated tests prove mechanics; they do not prove political or factual fairness
 ## Reader-facing evidence gate
 
 Published claims must have a linked story report and an attributed note. Timeline items currently represent publication dates only. Diversity cards disclose the count of sources with recorded ownership; they do not calculate independence, political balance, or blindspots until the data model and labelled evaluation set support those claims.
+
+## Reviewed-summary guard
+
+A reader-facing reviewed summary is accepted only when it is 20–1,000 characters and tied to a non-rejected report already in its story. The page distinguishes this `operator-summary-v1` record from a short ingestion excerpt, which remains explicitly unreviewed. This enforces provenance mechanically, but does not substitute for the held-out factual-support evaluation required before automated summaries are introduced.

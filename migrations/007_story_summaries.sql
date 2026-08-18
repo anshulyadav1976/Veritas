@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS story_summaries (
+  id TEXT PRIMARY KEY,
+  story_id TEXT NOT NULL UNIQUE REFERENCES stories(id),
+  text TEXT NOT NULL,
+  evidence_article_id TEXT NOT NULL REFERENCES articles(id),
+  method_version TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+) STRICT;

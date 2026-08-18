@@ -197,3 +197,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 
 - Added browser-only media-diet tracking, disabled by default, with a 200-visit cap and one-click local history removal.
 - The interface labels it as a reading-history summary and explicitly does not infer source independence, political balance, or quality. Lint, 28 tests, and a production build passed.
+
+## 2026-08-18 — evidence-linked reviewed summaries
+
+- Added one bounded, operator-reviewed story summary record with a required reference to a non-rejected report in that story and an explicit method version (`operator-summary-v1`).
+- Replacing a summary updates the same reviewed record and the story’s current display value. Initial RSS/GDELT excerpts remain visibly labelled as unreviewed; the system does not present them as verified or AI-authored summaries.
+- `pnpm db:migrate`, `pnpm lint`, `pnpm test` (30 tests), and `pnpm build` passed.

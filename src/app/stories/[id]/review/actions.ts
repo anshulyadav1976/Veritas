@@ -7,6 +7,7 @@ import { createClaim } from "@/lib/claims";
 import { isOwner } from "@/lib/owner-session";
 import { mergeStories, splitStoryArticle } from "@/lib/story-operations";
 import { createReportingChain } from "@/lib/reporting-chains";
+import { saveStorySummary } from "@/lib/story-summaries";
 
 export async function addClaim(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized");
@@ -28,5 +29,10 @@ export async function splitStory(formData: FormData) {
 export async function addReportingChain(formData: FormData) {
   if (!(await isOwner())) throw new Error("Unauthorized"); const storyId = String(formData.get("storyId") ?? "");
   createReportingChain({ storyId, articleId: String(formData.get("articleId") ?? ""), label: String(formData.get("label") ?? ""), basis: String(formData.get("basis") ?? ""), confidence: String(formData.get("confidence") ?? "") });
+  revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`);
+}
+export async function publishSummary(formData: FormData) {
+  if (!(await isOwner())) throw new Error("Unauthorized"); const storyId = String(formData.get("storyId") ?? "");
+  saveStorySummary({ storyId, articleId: String(formData.get("articleId") ?? ""), text: String(formData.get("text") ?? "") });
   revalidatePath(`/stories/${storyId}`); redirect(`/stories/${storyId}`);
 }

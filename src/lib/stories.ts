@@ -33,7 +33,8 @@ export type StoryArticle = {
 export type StoryClaim = { id: string; text: string; status: string; analysisVersion: string; createdAt: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string };
 export type StoryDiversity = { sourceCount: number; sourcesWithOwnership: number; recordedOwnerGroups: number; reportingChainCount: number; unclassifiedArticles: number };
 export type StoryOperation = { id: string; action: string; reason: string; relatedStoryId: string | null; createdAt: string };
-export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; diversity: StoryDiversity; operations: StoryOperation[] };
+export type StorySummary = { text: string; evidenceArticleId: string; methodVersion: string; updatedAt: string };
+export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; diversity: StoryDiversity; operations: StoryOperation[]; summaryRecord: StorySummary | null };
 
 export type SourceProfile = {
   id: string; name: string; domain: string; countryCode: string | null; languageTag: string | null; sourceType: string | null;
@@ -137,5 +138,6 @@ export function getStory(id: string): StoryDetail | null {
     WHERE story_articles.story_id = ? AND story_articles.decision != 'rejected'
   `).get(id, id, id) as StoryDiversity;
   const operations = db.prepare("SELECT id, action, reason, related_story_id AS relatedStoryId, created_at AS createdAt FROM story_operations WHERE story_id = ? OR related_story_id = ? ORDER BY created_at DESC").all(id, id) as StoryOperation[];
-  return { ...story, articles, claims, diversity, operations };
+  const summaryRecord = db.prepare("SELECT text, evidence_article_id AS evidenceArticleId, method_version AS methodVersion, updated_at AS updatedAt FROM story_summaries WHERE story_id = ?").get(id) as StorySummary | undefined;
+  return { ...story, articles, claims, diversity, operations, summaryRecord: summaryRecord ?? null };
 }

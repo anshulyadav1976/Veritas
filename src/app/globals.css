@@ -16,6 +16,7 @@ h2 { font-size: 1.5rem; }
 h3 { font-size: clamp(1.6rem, 3vw, 2.25rem); line-height: 1.05; }
 .lede, .story p, .empty p { max-width: 62ch; font-size: 1rem; line-height: 1.65; }
 .lede { margin: 22px 0 0; color: #3a464c; }
+.summary-label { margin: 20px 0 -10px; color: var(--slate); font: .68rem/1.4 ui-monospace, "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .05em; }
 .section-heading { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--ink); padding-bottom: 12px; }
 .region-nav { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 14px 0; border-bottom: 1px solid var(--line); font: .72rem/1.4 ui-monospace, "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .05em; }
 .region-nav a { color: var(--slate); text-decoration: none; }

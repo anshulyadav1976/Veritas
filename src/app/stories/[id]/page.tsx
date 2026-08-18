@@ -26,7 +26,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
     <article className="story-detail">
       <p className="eyebrow">{story.state} · {story.articleCount} reports · {story.sourceCount} publications</p>
       <h1>{story.headline}</h1>
-      {story.summary && <p className="lede">{story.summary}</p>}
+      {story.summary && <><p className="summary-label">{story.summaryRecord ? `Reviewed summary · ${story.summaryRecord.methodVersion}` : "Initial feed excerpt · not a reviewed summary"}</p><p className="lede">{story.summary}</p></>}
       <SaveStoryButton storyId={story.id}/>
       <section className="evidence-intro" aria-labelledby="reporting-heading">
         <div><p className="eyebrow">Evidence trail</p><h2 id="reporting-heading">Original reporting</h2></div>

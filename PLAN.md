@@ -2,7 +2,7 @@
 
 ## Current state
 
-This repository contains the Phase 0 vertical slice and substantive Phase 1 foundations: RSS/Atom plus opt-in GDELT discovery, source-linked story reading, regional filtering, source profiles, owner-only encrypted provider settings, a web manifest, and local-only saves. It is still an evidence-first web app—not a publisher or a truth oracle. Evidence lineage, evaluated analyses, offline cache policy, and broader Phase 3 workflows remain in progress.
+This repository contains the Phase 0 vertical slice and substantive Phase 1–3 foundations: RSS/Atom plus opt-in GDELT discovery, source-linked story reading, regional filtering, source profiles, reviewed evidence records and summaries, owner-only encrypted provider settings, a safe PWA shell, local-only saves/media-diet tracking, and grounded owner Q&A. It is still an evidence-first web app—not a publisher or a truth oracle. Broader evaluated analyses, user-facing notification/community workflows, localization, and MCP remain in progress.
 
 ## Decisions and assumptions
 
@@ -51,7 +51,7 @@ Depends on: M1.
 
 - [ ] Implement the explainable hybrid clustering baseline and a reviewable story membership decision log.
 - [x] Add manual merge/split controls restricted to operators; record supersession rather than rewrite history. Both operations require bounded reasons and retain a story-operation history; split membership is rejected rather than deleted.
-- [ ] Produce canonical story headline/summary only from selected cluster evidence, with schema validation and explicit “early/developing” states.
+- [x] Produce a bounded, operator-reviewed summary only from a selected story report. The displayed summary carries an explicit `operator-summary-v1` method label and an evidence-report reference; feed excerpts remain visibly unreviewed.
 - [x] Add source registry fundamentals: canonical identity, country/language/type, ownership assertions, and source-assessment storage with evidence/review timestamps. The operator interface for source assessment follows once a curated source registry exists.
 - [x] Build public home, regional feed, source profile, and story overview pages. They show report/publication counts, original links, publisher-level record boundaries, and stored membership decisions—not premature political charts. Topic classification and independent-chain counts follow source lineage work.
 
@@ -63,7 +63,7 @@ Depends on: M2.
 
 - [ ] Add account/auth through a replaceable library or adapter, preferences, saved stories, and basic topic/region ranking with clear controls.
 - [x] Add source-profile displays; keep historical assessment/ownership records and article-level reporting visibly separate. There are no orientation/reliability labels until reviewed source-assessment data exists.
-- [ ] Add versioned, schema-validated global summaries and article analyses only where sufficient evidence exists; provide per-finding citations. The current owner workflow records human-authored claims with linked publisher evidence; it does not generate or imply a model verdict.
+- [x] Add versioned, schema-validated global summaries only where an operator selects a story report as evidence; publish the method label and retain the source link. The current owner workflow also records human-authored claims with linked publisher evidence; it does not generate or imply a model verdict.
 - [ ] Add perspective comparison that reports observed coverage/framing differences, sample size, unknown/unclassified share, and caveats.
 - [x] Implement settings, encrypted BYOK credentials, provider test/delete flows, safe custom endpoint validation, and a security review. The first test flow is OpenAI-compatible only; other provider adapters need their own bounded connection contracts.
 - [x] Add installable PWA shell and offline fallback with local saved-story IDs. The service worker intentionally caches only the offline page; report/evidence caching is deferred until it can carry clear freshness and deletion controls.

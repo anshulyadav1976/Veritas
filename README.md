@@ -4,7 +4,7 @@ Open-source, self-hostable news intelligence: a transparent evidence layer that 
 
 ## Status
 
-Foundation and the first ingestion/reader slice are complete: RSS and Atom feeds can be ingested into SQLite, reports are clustered transparently, and readers can inspect original links on a story page. GDELT discovery and evidence intelligence remain in progress; this is not yet a complete news product.
+The Phase 0 foundation and substantial Phase 1–3 work are implemented: RSS and Atom feeds ingest into SQLite, reports are clustered transparently, readers can inspect original links and evidence records, and operators can publish evidence-linked reviewed summaries. GDELT discovery, broader evaluation, community workflows, localization, and MCP remain in progress; this is not yet a complete news product.
 
 ## Local development
 

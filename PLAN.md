@@ -78,7 +78,7 @@ Depends on: M3 and labelled evaluation data.
 - [ ] Associate supporting and contradicting evidence separately; use primary sources and fact-check search as evidence, never model memory as verification.
 - [ ] Ship discrete statuses: Confirmed, Well supported, Contested, Unverified, Contradicted, or Opinion/prediction/not fact-checkable.
 - [ ] Add reporting-chain and ownership diversity, a conservative blindspot calculation, and provenance-rich timeline entries.
-- [ ] Add an evaluation gate for every reader-facing intelligence output and a correction/recompute path.
+- [ ] Add an evaluation gate for every reader-facing intelligence output and a correction/recompute path. A minimal labelled clustering regression set and evidence publication guard now exist; broader held-out evaluation and correction workflows remain required.
 
 Acceptance: every displayed status, diversity metric, and timeline item links to evidence and states limitations.
 

@@ -31,7 +31,8 @@ export type StoryArticle = {
 };
 
 export type StoryClaim = { id: string; text: string; status: string; analysisVersion: string; createdAt: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string };
-export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[] };
+export type StoryDiversity = { sourceCount: number; sourcesWithOwnership: number; recordedOwnerGroups: number };
+export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[]; diversity: StoryDiversity };
 
 export type SourceProfile = {
   id: string; name: string; domain: string; countryCode: string | null; languageTag: string | null; sourceType: string | null;
@@ -122,5 +123,15 @@ export function getStory(id: string): StoryDetail | null {
     WHERE claims.story_id = ?
     ORDER BY claims.created_at DESC, claim_evidence.created_at ASC
   `).all(id) as StoryClaim[];
-  return { ...story, articles, claims };
+  const diversity = db.prepare(`
+    SELECT COUNT(DISTINCT sources.id) AS sourceCount,
+      COUNT(DISTINCT CASE WHEN ownership_assertions.id IS NOT NULL THEN sources.id END) AS sourcesWithOwnership,
+      COUNT(DISTINCT ownership_assertions.owner_name) AS recordedOwnerGroups
+    FROM story_articles
+    JOIN articles ON articles.id = story_articles.article_id
+    JOIN sources ON sources.id = articles.source_id
+    LEFT JOIN ownership_assertions ON ownership_assertions.source_id = sources.id
+    WHERE story_articles.story_id = ? AND story_articles.decision != 'rejected'
+  `).get(id) as StoryDiversity;
+  return { ...story, articles, claims, diversity };
 }

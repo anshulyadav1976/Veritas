@@ -140,3 +140,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added bounded regional story filters for the current curated-country set and made every report’s publisher a source-profile link.
 - Added source profiles that distinguish identity, historical assessment records, ownership assertions, and recent publisher reporting. Unknown is shown explicitly; a missing assessment is not rendered as a reliability or ideological judgment.
 - Lint, 16 unit tests, and the production build passed. This UI pass also applied the current Web Interface Guidelines to active filters, long publisher/article labels, and responsive ownership rows.
+
+## 2026-08-18 — cautious timeline and diversity baseline
+
+- Added a report-publication timeline that links every item to the original publisher and explicitly avoids claiming an event chronology.
+- Added transparent publisher/ownership-record coverage counts. Independent-chain, perspective-balance, and blindspot outputs remain unavailable until reviewed lineage/classification data exists.
+- Added a version-controlled labelled clustering pair set, exercised by the test suite as a regression baseline. Lint, 17 tests, and a production build passed.

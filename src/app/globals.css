@@ -43,6 +43,16 @@ h3 { font-size: clamp(1.6rem, 3vw, 2.25rem); line-height: 1.05; }
 .report-meta { display: flex; justify-content: space-between; gap: 12px; color: var(--slate); font: 0.72rem/1.4 ui-monospace, "IBM Plex Mono", monospace; letter-spacing: .05em; text-transform: uppercase; }
 .report .metrics { margin-top: 14px; font-size: .66rem; text-transform: none; letter-spacing: .02em; }
 .claims { margin-top: 56px; }
+.timeline, .diversity { margin-top: 56px; }
+.timeline-list { list-style: none; margin: 0; padding: 0; }
+.timeline-list li { display: grid; grid-template-columns: 180px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.timeline-list time, .timeline-list p, .diversity dt, .diversity dd { margin: 0; }
+.timeline-list time { color: var(--slate); font: .72rem/1.5 ui-monospace, "IBM Plex Mono", monospace; }
+.timeline-list p { line-height: 1.5; }
+.diversity dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 0; background: var(--line); }
+.diversity dl div { padding: 16px; background: var(--paper); }
+.diversity dt { color: var(--slate); font: .68rem/1.4 ui-monospace, "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .04em; }
+.diversity dd { margin-top: 8px; font: 500 1.4rem/1 Georgia, "Newsreader", serif; }
 .profile-section { margin-top: 48px; }
 .profile-section > p { max-width: 62ch; line-height: 1.6; }
 .plain-list { list-style: none; margin: 0; padding: 0; }
@@ -65,4 +75,4 @@ button.quiet { min-height: 32px; background: transparent; color: var(--ink); pad
 button.quiet:hover { background: transparent; color: var(--signal); }
 .save-story { margin-top: 20px; color: var(--signal); }
 :focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
-@media (max-width: 600px) { .shell { width: min(100% - 28px, 900px); } .masthead p { display: none; } .brief, .story-detail { padding-top: 52px; } .brief { padding-bottom: 40px; } .evidence-intro { grid-template-columns: 1fr; gap: 12px; margin-top: 44px; } .report { padding-left: 20px; } }
+@media (max-width: 600px) { .shell { width: min(100% - 28px, 900px); } .masthead p { display: none; } .brief, .story-detail { padding-top: 52px; } .brief { padding-bottom: 40px; } .evidence-intro { grid-template-columns: 1fr; gap: 12px; margin-top: 44px; } .report { padding-left: 20px; } .timeline-list li { grid-template-columns: 1fr; gap: 6px; } .diversity dl { grid-template-columns: 1fr; } }

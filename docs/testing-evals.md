@@ -33,3 +33,14 @@ Version source data, annotations, scorer, prompt/template, model, and evaluation
 ## Evaluation operating rules
 
 Automated tests prove mechanics; they do not prove political or factual fairness. Ship a reader-facing intelligence feature only with a baseline, documented sample/method limits, a release threshold, sampled human review, and rollback/disable path. Re-run evaluations after provider/model/prompt/methodology changes, and keep reports attached to analysis versions. Corrections become new fixture cases.
+## Current implemented baseline
+
+`pnpm lint`, `pnpm test`, and `pnpm build` are required locally and in CI. Tests cover URL canonicalization, XML parsing limits, conservative clustering, encrypted credentials, provider endpoint SSRF policy, claim input validation, and GDELT record parsing.
+
+## Labelled clustering baseline
+
+`evals/clustering.json` is a small, version-controlled pair set that the test suite evaluates against the automatic headline-overlap rule. It is a regression tripwire, not a quality claim: it currently contains one true pair and one hard negative. Expand it with reviewed, jurisdiction-diverse examples before changing the clustering threshold or adding new signals.
+
+## Reader-facing evidence gate
+
+Published claims must have a linked story report and an attributed note. Timeline items currently represent publication dates only. Diversity cards disclose the count of sources with recorded ownership; they do not calculate independence, political balance, or blindspots until the data model and labelled evaluation set support those claims.

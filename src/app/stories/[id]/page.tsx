@@ -32,7 +32,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
       </section>
       <ol className="report-list">
         {story.articles.map((article) => <li key={article.id} className="report">
-          <div className="report-meta"><span>{article.sourceName}</span><span>{article.sourceCountry ?? article.sourceLanguage ?? article.sourceDomain}</span></div>
+          <div className="report-meta"><Link href={`/sources/${encodeURIComponent(article.sourceDomain)}`}>{article.sourceName}</Link><span>{article.sourceCountry ?? article.sourceLanguage ?? article.sourceDomain}</span></div>
           <h2><a href={article.canonicalUrl} target="_blank" rel="noreferrer">{article.title}<span aria-hidden="true"> ↗</span></a></h2>
           {article.excerpt && <p>{article.excerpt}</p>}
           <p className="metrics">{formatTime(article.publishedAt)} · {article.decision} join · {describeMembership(article.reasonJson, article.algorithmVersion)}</p>

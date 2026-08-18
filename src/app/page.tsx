@@ -8,8 +8,12 @@ function formatTime(timestamp: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(new Date(timestamp));
 }
 
-export default function HomePage() {
-  const stories = listStories();
+const regions = [{ code: undefined, label: "Global" }, { code: "US", label: "United States" }, { code: "GB", label: "United Kingdom" }, { code: "IN", label: "India" }];
+
+export default async function HomePage({ searchParams }: { searchParams: Promise<{ region?: string }> }) {
+  const selectedRegion = (await searchParams).region?.toUpperCase();
+  const region = regions.some((item) => item.code === selectedRegion) ? selectedRegion : undefined;
+  const stories = listStories(30, region);
 
   return (
     <main id="main-content" className="shell">
@@ -24,9 +28,10 @@ export default function HomePage() {
       </section>
       <section aria-labelledby="stories-heading">
         <div className="section-heading">
-          <h2 id="stories-heading">Top stories</h2>
+          <h2 id="stories-heading">{region ? `${regions.find((item) => item.code === region)?.label} stories` : "Top stories"}</h2>
           <span>{stories.length} indexed</span>
         </div>
+        <nav className="region-nav" aria-label="Story region">{regions.map((item) => <Link aria-current={item.code === region ? "page" : undefined} key={item.label} href={item.code ? `/?region=${item.code}` : "/"}>{item.label}</Link>)}</nav>
         {stories.length === 0 ? (
           <div className="empty" role="status">
             <p className="eyebrow">No stories yet</p>

@@ -2,7 +2,7 @@
 
 ## Current state
 
-This repository now contains the Phase 0 foundation plus the first RSS/Atom ingestion and public story-reader slice. It is still an open-source, evidence-first news intelligence web app and PWA—not a publisher or a truth oracle. GDELT, source assessments, evidence intelligence, saved stories, and PWA offline support remain planned work.
+This repository contains the Phase 0 vertical slice and substantive Phase 1 foundations: RSS/Atom plus opt-in GDELT discovery, source-linked story reading, regional filtering, source profiles, owner-only encrypted provider settings, a web manifest, and local-only saves. It is still an evidence-first web app—not a publisher or a truth oracle. Evidence lineage, evaluated analyses, offline cache policy, and broader Phase 3 workflows remain in progress.
 
 ## Decisions and assumptions
 
@@ -53,7 +53,7 @@ Depends on: M1.
 - [ ] Add manual merge/split controls restricted to operators; record supersession rather than rewrite history.
 - [ ] Produce canonical story headline/summary only from selected cluster evidence, with schema validation and explicit “early/developing” states.
 - [x] Add source registry fundamentals: canonical identity, country/language/type, ownership assertions, and source-assessment storage with evidence/review timestamps. The operator interface for source assessment follows once a curated source registry exists.
-- [x] Build public home and story overview pages. They show report/publication counts, original links, and the stored membership decision—not premature political charts. Topic/region feeds and independent-chain counts follow source lineage work.
+- [x] Build public home, regional feed, source profile, and story overview pages. They show report/publication counts, original links, publisher-level record boundaries, and stored membership decisions—not premature political charts. Topic classification and independent-chain counts follow source lineage work.
 
 Acceptance: a user can browse a correctly clustered story, inspect its articles and original links, and see why it exists.
 
@@ -62,7 +62,7 @@ Acceptance: a user can browse a correctly clustered story, inspect its articles 
 Depends on: M2.
 
 - [ ] Add account/auth through a replaceable library or adapter, preferences, saved stories, and basic topic/region ranking with clear controls.
-- [ ] Add source-profile displays; keep historical orientation, reliability, and article-level analysis visibly separate.
+- [x] Add source-profile displays; keep historical assessment/ownership records and article-level reporting visibly separate. There are no orientation/reliability labels until reviewed source-assessment data exists.
 - [ ] Add versioned, schema-validated global summaries and article analyses only where sufficient evidence exists; provide per-finding citations. The current owner workflow records human-authored claims with linked publisher evidence; it does not generate or imply a model verdict.
 - [ ] Add perspective comparison that reports observed coverage/framing differences, sample size, unknown/unclassified share, and caveats.
 - [ ] Implement settings, encrypted BYOK credentials, provider test/delete flows, safe custom endpoint validation, and a security review.

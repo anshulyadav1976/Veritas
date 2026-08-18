@@ -33,7 +33,14 @@ export type StoryArticle = {
 export type StoryClaim = { id: string; text: string; status: string; analysisVersion: string; createdAt: string; articleTitle: string; articleUrl: string; sourceName: string; stance: string; note: string };
 export type StoryDetail = StoryPreview & { articles: StoryArticle[]; claims: StoryClaim[] };
 
-export function listStories(limit = 30): StoryPreview[] {
+export type SourceProfile = {
+  id: string; name: string; domain: string; countryCode: string | null; languageTag: string | null; sourceType: string | null;
+  articleCount: number; storyCount: number; assessment: { status: string; rationale: string | null; evidenceUrl: string | null; methodVersion: string; reviewedAt: string | null } | null;
+  owners: Array<{ ownerName: string; evidenceUrl: string; assertedAt: string | null; confidence: number }>;
+  articles: Array<{ id: string; title: string; canonicalUrl: string; publishedAt: string | null; storyId: string | null; storyHeadline: string | null }>;
+};
+
+export function listStories(limit = 30, countryCode?: string): StoryPreview[] {
   runMigrations();
   return db.prepare(`
     SELECT stories.id, stories.headline, stories.summary, stories.state, stories.importance,
@@ -43,10 +50,40 @@ export function listStories(limit = 30): StoryPreview[] {
     LEFT JOIN story_articles ON story_articles.story_id = stories.id AND story_articles.decision != 'rejected'
     LEFT JOIN articles ON articles.id = story_articles.article_id
     WHERE stories.state != 'superseded'
+      AND (? IS NULL OR EXISTS (
+        SELECT 1 FROM story_articles regional_memberships
+        JOIN articles regional_articles ON regional_articles.id = regional_memberships.article_id
+        JOIN sources regional_sources ON regional_sources.id = regional_articles.source_id
+        WHERE regional_memberships.story_id = stories.id AND regional_memberships.decision != 'rejected' AND regional_sources.country_code = ?
+      ))
     GROUP BY stories.id
     ORDER BY stories.importance DESC, stories.updated_at DESC
     LIMIT ?
-  `).all(limit) as StoryPreview[];
+  `).all(countryCode ?? null, countryCode ?? null, limit) as StoryPreview[];
+}
+
+export function getSourceProfile(domain: string): SourceProfile | null {
+  runMigrations();
+  const source = db.prepare(`
+    SELECT sources.id, sources.name, sources.domain, sources.country_code AS countryCode, sources.language_tag AS languageTag, sources.source_type AS sourceType,
+      COUNT(DISTINCT articles.id) AS articleCount, COUNT(DISTINCT story_articles.story_id) AS storyCount
+    FROM sources
+    LEFT JOIN articles ON articles.source_id = sources.id
+    LEFT JOIN story_articles ON story_articles.article_id = articles.id AND story_articles.decision != 'rejected'
+    WHERE sources.domain = ? GROUP BY sources.id
+  `).get(domain) as Omit<SourceProfile, "assessment" | "owners" | "articles"> | undefined;
+  if (!source) return null;
+  const assessment = db.prepare("SELECT status, rationale, evidence_url AS evidenceUrl, method_version AS methodVersion, reviewed_at AS reviewedAt FROM source_assessments WHERE source_id = ?").get(source.id) as SourceProfile["assessment"];
+  const owners = db.prepare("SELECT owner_name AS ownerName, evidence_url AS evidenceUrl, asserted_at AS assertedAt, confidence FROM ownership_assertions WHERE source_id = ? ORDER BY asserted_at DESC, created_at DESC").all(source.id) as SourceProfile["owners"];
+  const articles = db.prepare(`
+    SELECT articles.id, articles.title, articles.canonical_url AS canonicalUrl, articles.published_at AS publishedAt,
+      stories.id AS storyId, stories.headline AS storyHeadline
+    FROM articles
+    LEFT JOIN story_articles ON story_articles.article_id = articles.id AND story_articles.decision != 'rejected'
+    LEFT JOIN stories ON stories.id = story_articles.story_id AND stories.state != 'superseded'
+    WHERE articles.source_id = ? ORDER BY articles.published_at DESC, articles.discovered_at DESC LIMIT 50
+  `).all(source.id) as SourceProfile["articles"];
+  return { ...source, assessment, owners, articles };
 }
 
 export function getStory(id: string): StoryDetail | null {

@@ -134,3 +134,9 @@ Add GDELT discovery behind explicit configuration, then build story-detail prove
 - Added repository CI for the exact migration, lint, unit-test, and production-build checks used locally.
 - Added contributor and security reporting guides that make data provenance, sensitive assessment contributions, and secret handling explicit.
 - Verified the CI action majors against the current upstream release pages before adding the workflow.
+
+## 2026-08-18 — regional reader and source identity surfaces
+
+- Added bounded regional story filters for the current curated-country set and made every report’s publisher a source-profile link.
+- Added source profiles that distinguish identity, historical assessment records, ownership assertions, and recent publisher reporting. Unknown is shown explicitly; a missing assessment is not rendered as a reliability or ideological judgment.
+- Lint, 16 unit tests, and the production build passed. This UI pass also applied the current Web Interface Guidelines to active filters, long publisher/article labels, and responsive ownership rows.
